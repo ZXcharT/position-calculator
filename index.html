@@ -23,7 +23,7 @@
         .input-group:focus-within {
             transform: translateY(-2px);
         }
-        .risk-btn, .type-btn {
+        .risk-btn, .type-btn, .mode-btn {
             transition: all 0.2s ease;
         }
         .risk-btn.active {
@@ -37,6 +37,11 @@
             color: white;
             transform: scale(1.05);
             box-shadow: 0 4px 12px rgba(139, 92, 246, 0.4);
+        }
+        .mode-btn.active {
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+            color: white;
+            box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
         }
         .result-card {
             background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
@@ -62,6 +67,22 @@
             background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
             color: white;
             font-weight: bold;
+        }
+        .price-input {
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            border: 2px solid #bae6fd;
+        }
+        .price-input:focus {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+        .stop-input {
+            background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
+            border: 2px solid #fecaca;
+        }
+        .stop-input:focus {
+            border-color: #ef4444;
+            box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
         }
     </style>
 </head>
@@ -128,52 +149,59 @@
                     </div>
                 </div>
 
-                <!-- Entry Price -->
-                <div class="input-group mb-6">
-                    <label class="block text-sm font-semibold text-slate-600 mb-2">开仓价格 (元)</label>
-                    <div class="relative">
-                        <span class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">¥</span>
-                        <input type="number" id="entryPrice" placeholder="0.00" step="0.01"
-                            class="w-full pl-8 pr-4 py-3 rounded-xl border border-slate-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition-all text-lg font-medium"
-                            oninput="calculatePosition()">
-                    </div>
-                </div>
-
-                <!-- Stop Loss Calculation Mode -->
-                <div class="mb-6">
+                <!-- Stop Loss Mode Selection -->
+                <div class="mb-4">
                     <label class="block text-sm font-semibold text-slate-600 mb-3">止损计算方式</label>
                     <div class="flex gap-2 p-1 bg-slate-100 rounded-xl">
-                        <button onclick="setStopMode('price')" id="mode-price" class="flex-1 py-2 px-4 rounded-lg text-sm font-medium transition-all bg-white shadow-sm text-blue-600">固定价格</button>
-                        <button onclick="setStopMode('percent')" id="mode-percent" class="flex-1 py-2 px-4 rounded-lg text-sm font-medium transition-all text-slate-500 hover:text-slate-700">止损百分比</button>
+                        <button onclick="setStopMode('price')" id="mode-price" class="mode-btn active flex-1 py-2 px-4 rounded-lg text-sm font-medium transition-all">固定价格</button>
+                        <button onclick="setStopMode('percent')" id="mode-percent" class="mode-btn flex-1 py-2 px-4 rounded-lg text-sm font-medium transition-all text-slate-600 hover:text-slate-800">固定百分比</button>
                     </div>
                 </div>
 
-                <!-- Stop Loss Price Input -->
-                <div id="stopPriceContainer" class="input-group mb-6">
-                    <label class="block text-sm font-semibold text-slate-600 mb-2">止损价格 (元)</label>
-                    <div class="relative">
-                        <span class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">¥</span>
-                        <input type="number" id="stopPrice" placeholder="0.00" step="0.01"
-                            class="w-full pl-8 pr-4 py-3 rounded-xl border border-slate-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition-all text-lg font-medium"
-                            oninput="calculateFromStopPrice()">
+                <!-- Entry Price and Stop Loss Price/Percent in same row -->
+                <div class="grid grid-cols-2 gap-4 mb-2">
+                    <!-- Entry Price -->
+                    <div class="input-group">
+                        <label class="block text-sm font-semibold text-slate-600 mb-2">开仓价格 (元)</label>
+                        <div class="relative">
+                            <span class="absolute left-3 top-1/2 -translate-y-1/2 text-blue-500 font-bold">¥</span>
+                            <input type="number" id="entryPrice" placeholder="0.00" step="0.01"
+                                class="w-full pl-8 pr-3 py-3 rounded-xl price-input outline-none transition-all text-lg font-medium"
+                                oninput="calculatePosition()">
+                        </div>
                     </div>
-                    <div class="mt-1 text-right text-sm text-slate-500">
-                        止损幅度: <span id="stopPercentDisplay" class="font-medium text-red-500">--%</span>
+
+                    <!-- Stop Loss Price Input -->
+                    <div id="stopPriceInput" class="input-group">
+                        <label class="block text-sm font-semibold text-slate-600 mb-2">止损价格 (元)</label>
+                        <div class="relative">
+                            <span class="absolute left-3 top-1/2 -translate-y-1/2 text-red-500 font-bold">¥</span>
+                            <input type="number" id="stopPrice" placeholder="0.00" step="0.01"
+                                class="w-full pl-8 pr-3 py-3 rounded-xl stop-input outline-none transition-all text-lg font-medium"
+                                oninput="calculateFromStopPrice()">
+                        </div>
+                    </div>
+
+                    <!-- Stop Loss Percent Input (Hidden by default) -->
+                    <div id="stopPercentInput" class="input-group hidden">
+                        <label class="block text-sm font-semibold text-slate-600 mb-2">止损百分比 (%)</label>
+                        <div class="relative">
+                            <span class="absolute left-3 top-1/2 -translate-y-1/2 text-red-500 font-bold">-</span>
+                            <input type="number" id="stopPercent" placeholder="例如: 5" step="0.1" min="0.1" max="50"
+                                class="w-full pl-8 pr-8 py-3 rounded-xl stop-input outline-none transition-all text-lg font-medium"
+                                oninput="calculateFromStopPercent()">
+                            <span class="absolute right-3 top-1/2 -translate-y-1/2 text-red-400 text-sm">%</span>
+                        </div>
                     </div>
                 </div>
 
-                <!-- Stop Loss Percent Input (Hidden by default) -->
-                <div id="stopPercentContainer" class="input-group mb-6 hidden">
-                    <label class="block text-sm font-semibold text-slate-600 mb-2">止损百分比 (%)</label>
-                    <div class="relative">
-                        <span class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">-</span>
-                        <input type="number" id="stopPercent" placeholder="例如: 5" step="0.1" min="0.1" max="50"
-                            class="w-full pl-8 pr-4 py-3 rounded-xl border border-slate-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition-all text-lg font-medium"
-                            oninput="calculateFromStopPercent()">
-                        <span class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400">%</span>
+                <!-- Dynamic Info Display (bottom right of the row) -->
+                <div class="text-right mb-6">
+                    <div id="priceModeInfo" class="text-sm text-slate-500">
+                        对应止损幅度: <span class="font-medium text-red-500">--%</span>
                     </div>
-                    <div class="mt-1 text-right text-sm text-slate-500">
-                        对应止损价: ¥<span id="calculatedStopPrice" class="font-medium text-red-500">--</span>
+                    <div id="percentModeInfo" class="text-sm text-slate-500 hidden">
+                        对应止损价格: <span class="font-medium text-red-500">¥--</span>
                     </div>
                 </div>
 
@@ -284,15 +312,11 @@
                     <ul class="space-y-2 text-sm text-slate-600">
                         <li class="flex items-start gap-2">
                             <span class="text-emerald-500 mt-1">•</span>
-                            <span><strong>B1类型 (10:1)</strong>：适用于高确定性趋势行情，追求极致盈亏比</span>
+                            <span><strong>B1类型 (10:1)</strong>：建议止损控制在1~4%以内，越小越好，追求极致盈亏比</span>
                         </li>
                         <li class="flex items-start gap-2">
                             <span class="text-emerald-500 mt-1">•</span>
-                            <span><strong>B2类型 (5:1)</strong>：适用于波段交易，平衡胜率与盈亏比</span>
-                        </li>
-                        <li class="flex items-start gap-2">
-                            <span class="text-emerald-500 mt-1">•</span>
-                            <span>高倍盈亏比交易需要严格止损，建议止损幅度控制在3%-8%</span>
+                            <span><strong>B2类型 (5:1)</strong>：建议止损控制在10%以内，平衡胜率效率与盈亏比</span>
                         </li>
                         <li class="flex items-start gap-2">
                             <span class="text-emerald-500 mt-1">•</span>
@@ -337,20 +361,26 @@
         function setStopMode(mode) {
             currentStopMode = mode;
             
+            // Update buttons
             document.getElementById('mode-price').className = mode === 'price' 
-                ? 'flex-1 py-2 px-4 rounded-lg text-sm font-medium transition-all bg-white shadow-sm text-blue-600'
-                : 'flex-1 py-2 px-4 rounded-lg text-sm font-medium transition-all text-slate-500 hover:text-slate-700';
+                ? 'mode-btn active flex-1 py-2 px-4 rounded-lg text-sm font-medium transition-all'
+                : 'mode-btn flex-1 py-2 px-4 rounded-lg text-sm font-medium transition-all text-slate-600 hover:text-slate-800';
             document.getElementById('mode-percent').className = mode === 'percent'
-                ? 'flex-1 py-2 px-4 rounded-lg text-sm font-medium transition-all bg-white shadow-sm text-blue-600'
-                : 'flex-1 py-2 px-4 rounded-lg text-sm font-medium transition-all text-slate-500 hover:text-slate-700';
+                ? 'mode-btn active flex-1 py-2 px-4 rounded-lg text-sm font-medium transition-all'
+                : 'mode-btn flex-1 py-2 px-4 rounded-lg text-sm font-medium transition-all text-slate-600 hover:text-slate-800';
             
+            // Toggle inputs
             if (mode === 'price') {
-                document.getElementById('stopPriceContainer').classList.remove('hidden');
-                document.getElementById('stopPercentContainer').classList.add('hidden');
+                document.getElementById('stopPriceInput').classList.remove('hidden');
+                document.getElementById('stopPercentInput').classList.add('hidden');
+                document.getElementById('priceModeInfo').classList.remove('hidden');
+                document.getElementById('percentModeInfo').classList.add('hidden');
                 calculateFromStopPrice();
             } else {
-                document.getElementById('stopPriceContainer').classList.add('hidden');
-                document.getElementById('stopPercentContainer').classList.remove('hidden');
+                document.getElementById('stopPriceInput').classList.add('hidden');
+                document.getElementById('stopPercentInput').classList.remove('hidden');
+                document.getElementById('priceModeInfo').classList.add('hidden');
+                document.getElementById('percentModeInfo').classList.remove('hidden');
                 calculateFromStopPercent();
             }
         }
@@ -361,8 +391,10 @@
             
             if (entry && stop && entry > 0) {
                 const percent = ((entry - stop) / entry * 100).toFixed(2);
-                document.getElementById('stopPercentDisplay').textContent = percent + '%';
+                document.getElementById('priceModeInfo').innerHTML = `对应止损幅度: <span class="font-medium text-red-500">${percent}%</span>`;
                 calculatePosition();
+            } else {
+                document.getElementById('priceModeInfo').innerHTML = `对应止损幅度: <span class="font-medium text-red-500">--%</span>`;
             }
         }
 
@@ -372,8 +404,10 @@
             
             if (entry && percent && entry > 0) {
                 const stopPrice = (entry * (1 - percent / 100)).toFixed(2);
-                document.getElementById('calculatedStopPrice').textContent = stopPrice;
+                document.getElementById('percentModeInfo').innerHTML = `对应止损价格: <span class="font-medium text-red-500">¥${stopPrice}</span>`;
                 calculatePosition();
+            } else {
+                document.getElementById('percentModeInfo').innerHTML = `对应止损价格: <span class="font-medium text-red-500">¥--</span>`;
             }
         }
 
@@ -440,6 +474,13 @@
             document.getElementById('targetPrice').textContent = targetPrice.toFixed(2);
             document.getElementById('targetProfit').textContent = targetProfit.toFixed(2);
             document.getElementById('targetUpPercent').textContent = targetUpPercent;
+
+            // Update dynamic info based on mode
+            if (currentStopMode === 'price') {
+                document.getElementById('priceModeInfo').innerHTML = `对应止损幅度: <span class="font-medium text-red-500">${stopLossPercent}%</span>`;
+            } else {
+                document.getElementById('percentModeInfo').innerHTML = `对应止损价格: <span class="font-medium text-red-500">¥${stop.toFixed(2)}</span>`;
+            }
 
             // Warnings
             const warningBox = document.getElementById('warningBox');
