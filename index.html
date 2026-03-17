@@ -23,7 +23,7 @@
         .input-group:focus-within {
             transform: translateY(-2px);
         }
-        .risk-btn, .type-btn, .mode-btn {
+        .risk-btn, .type-btn, .mode-btn, .tab-btn, .rr-btn {
             transition: all 0.2s ease;
         }
         .risk-btn.active {
@@ -38,10 +38,16 @@
             transform: scale(1.05);
             box-shadow: 0 4px 12px rgba(139, 92, 246, 0.4);
         }
-        .mode-btn.active {
+        .mode-btn.active, .rr-btn.active {
             background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
             color: white;
             box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
+        }
+        .tab-btn.active {
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            color: white;
+            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.4);
+            transform: translateY(-2px);
         }
         .result-card {
             background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
@@ -84,268 +90,739 @@
             border-color: #22c55e;
             box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.1);
         }
+        /* Pit page specific colors */
+        .pit-top-input {
+            background: linear-gradient(135deg, #fef9c3 0%, #fde047 100%);
+            border: 2px solid #facc15;
+        }
+        .pit-top-input:focus {
+            border-color: #eab308;
+            box-shadow: 0 0 0 3px rgba(234, 179, 8, 0.1);
+        }
+        .pit-bottom-input {
+            background: linear-gradient(135deg, #dcfce7 0%, #86efac 100%);
+            border: 2px solid #4ade80;
+        }
+        .pit-bottom-input:focus {
+            border-color: #22c55e;
+            box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.1);
+        }
+        .pit-current-input {
+            background: linear-gradient(135deg, #dbeafe 0%, #60a5fa 100%);
+            border: 2px solid #3b82f6;
+        }
+        .pit-current-input:focus {
+            border-color: #2563eb;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+        .pit-target-card {
+            background: linear-gradient(135deg, #fef9c3 0%, #fde047 100%);
+            border-left: 4px solid #eab308;
+        }
+        .pit-profit-card {
+            background: linear-gradient(135deg, #fee2e2 0%, #fca5a5 100%);
+            border-left: 4px solid #ef4444;
+        }
+        .pit-number-target {
+            background: linear-gradient(135deg, #ca8a04 0%, #a16207 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 700;
+        }
+        .pit-number-profit {
+            background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 700;
+        }
         .creator-info {
             background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
             color: #fbbf24;
             border: 1px solid #fbbf24;
         }
+        .page-container {
+            display: none;
+        }
+        .page-container.active {
+            display: block;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .custom-rr-select {
+            background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+            border: 2px solid #d1d5db;
+        }
+        .custom-rr-select:focus {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+        .warning-box {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            border: 1px solid #f59e0b;
+            color: #92400e;
+        }
+        .disclaimer {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .status-success {
+            background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+            border: 1px solid #10b981;
+            color: #065f46;
+        }
+        .status-warning {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            border: 1px solid #f59e0b;
+            color: #92400e;
+        }
+        /* Compact layout utilities */
+        .compact-section {
+            margin-bottom: 1rem;
+        }
+        .compact-input {
+            padding: 0.5rem 0.75rem;
+            font-size: 0.95rem;
+        }
+        .compact-label {
+            font-size: 0.8rem;
+            margin-bottom: 0.25rem;
+        }
+        .compact-btn {
+            padding: 0.4rem 0.75rem;
+            font-size: 0.85rem;
+        }
+        .compact-card {
+            padding: 0.75rem;
+        }
+        .compact-text {
+            font-size: 0.85rem;
+        }
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.5rem;
+        }
     </style>
 </head>
-<body class="text-slate-800 p-4 md:p-8">
+<body class="text-slate-800 p-3 md:p-6">
 
     <div class="max-w-6xl mx-auto">
         <!-- Header -->
-        <div class="text-center mb-8 text-white">
-            <h1 class="text-4xl md:text-5xl font-bold mb-2 tracking-tight">开仓计算器</h1>
-            <p class="text-slate-300 text-lg">风险/盈亏比仓位管理工具</p>
+        <div class="text-center mb-4 text-white">
+            <h1 class="text-3xl md:text-4xl font-bold mb-1 tracking-tight">开仓计算器</h1>
+            <p class="text-slate-300 text-base">风险/盈亏比仓位管理工具</p>
         </div>
 
-        <div class="grid lg:grid-cols-2 gap-6">
-            <!-- Left Panel: Inputs -->
-            <div class="glass-panel rounded-2xl p-6 md:p-8 shadow-2xl">
-                <h2 class="text-2xl font-bold mb-6 text-slate-800 flex items-center gap-2">
-                    <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path>
+        <!-- Tab Navigation -->
+        <div class="flex justify-center mb-4">
+            <div class="glass-panel rounded-xl p-1.5 flex gap-1.5 shadow-xl">
+                <button onclick="switchTab('position')" id="tab-position" class="tab-btn active px-4 py-2 rounded-lg font-medium text-sm flex items-center gap-1.5 transition-all">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
                     </svg>
-                    交易参数设置
-                </h2>
+                    仓位计算
+                </button>
+                <button onclick="switchTab('pit')" id="tab-pit" class="tab-btn px-4 py-2 rounded-lg font-medium text-sm flex items-center gap-1.5 transition-all text-slate-600 hover:text-slate-800">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
+                    </svg>
+                    出坑计算
+                </button>
+                <button onclick="switchTab('protect')" id="tab-protect" class="tab-btn px-4 py-2 rounded-lg font-medium text-sm flex items-center gap-1.5 transition-all text-slate-600 hover:text-slate-800">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+                    </svg>
+                    回撤保护
+                </button>
+            </div>
+        </div>
 
-                <!-- Account Balance -->
-                <div class="input-group mb-6">
-                    <label class="block text-sm font-semibold text-slate-600 mb-2">账户总资金 (元)</label>
-                    <div class="relative">
-                        <span class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">¥</span>
-                        <input type="number" id="accountBalance" placeholder="例如: 100000" 
-                            class="w-full pl-8 pr-4 py-3 rounded-xl border border-slate-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition-all text-lg font-medium"
-                            oninput="calculatePosition()">
-                    </div>
-                </div>
+        <!-- Page 1: Position Size Calculator -->
+        <div id="page-position" class="page-container active">
+            <div class="grid lg:grid-cols-2 gap-4">
+                <!-- Left Panel -->
+                <div class="glass-panel rounded-xl p-5 shadow-2xl">
+                    <h2 class="text-xl font-bold mb-4 text-slate-800 flex items-center gap-2">
+                        <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path>
+                        </svg>
+                        交易参数设置
+                    </h2>
 
-                <!-- Risk Percentage -->
-                <div class="mb-6">
-                    <label class="block text-sm font-semibold text-slate-600 mb-3">单笔最大风险</label>
-                    <div class="grid grid-cols-4 gap-2">
-                        <button onclick="setRisk(1)" id="risk-1" class="risk-btn py-2 px-4 rounded-lg border border-slate-200 font-medium text-sm hover:border-blue-300">1%</button>
-                        <button onclick="setRisk(2)" id="risk-2" class="risk-btn active py-2 px-4 rounded-lg border border-slate-200 font-medium text-sm hover:border-blue-300">2%</button>
-                        <button onclick="setRisk(3)" id="risk-3" class="risk-btn py-2 px-4 rounded-lg border border-slate-200 font-medium text-sm hover:border-blue-300">3%</button>
-                        <button onclick="setRisk(4)" id="risk-4" class="risk-btn py-2 px-4 rounded-lg border border-slate-200 font-medium text-sm hover:border-blue-300">4%</button>
-                    </div>
-                    <input type="hidden" id="riskPercent" value="2">
-                </div>
-
-                <!-- Trade Type Selection -->
-                <div class="mb-6">
-                    <label class="block text-sm font-semibold text-slate-600 mb-3">开仓类型</label>
-                    <div class="grid grid-cols-2 gap-3">
-                        <button onclick="setTradeType('B1')" id="type-B1" class="type-btn active py-3 px-4 rounded-xl border border-slate-200 font-medium flex flex-col items-center gap-1">
-                            <span class="text-lg font-bold">B1</span>
-                            <span class="text-xs opacity-80">类B1</span>
-                        </button>
-                        <button onclick="setTradeType('B2')" id="type-B2" class="type-btn py-3 px-4 rounded-xl border border-slate-200 font-medium flex flex-col items-center gap-1">
-                            <span class="text-lg font-bold">B2</span>
-                            <span class="text-xs opacity-80">突破</span>
-                        </button>
-                    </div>
-                    <input type="hidden" id="tradeType" value="B1">
-                </div>
-
-                <!-- Stop Loss Mode Selection -->
-                <div class="mb-4">
-                    <label class="block text-sm font-semibold text-slate-600 mb-3">止损计算方式</label>
-                    <div class="flex gap-2 p-1 bg-slate-100 rounded-xl">
-                        <button onclick="setStopMode('price')" id="mode-price" class="mode-btn active flex-1 py-2 px-4 rounded-lg text-sm font-medium transition-all">固定价格</button>
-                        <button onclick="setStopMode('percent')" id="mode-percent" class="mode-btn flex-1 py-2 px-4 rounded-lg text-sm font-medium transition-all text-slate-600 hover:text-slate-800">固定百分比</button>
-                    </div>
-                </div>
-
-                <!-- Entry Price and Stop Loss Price/Percent in same row -->
-                <div class="grid grid-cols-2 gap-4 mb-2">
-                    <!-- Entry Price -->
-                    <div class="input-group">
-                        <label class="block text-sm font-semibold text-slate-600 mb-2">开仓价格 (元)</label>
+                    <div class="compact-section">
+                        <label class="block compact-label font-semibold text-slate-600">账户总资金 (元)</label>
                         <div class="relative">
-                            <span class="absolute left-3 top-1/2 -translate-y-1/2 text-red-500 font-bold">¥</span>
-                            <input type="number" id="entryPrice" placeholder="0.00" step="0.01"
-                                class="w-full pl-8 pr-3 py-3 rounded-xl entry-input outline-none transition-all text-lg font-medium"
+                            <span class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm">¥</span>
+                            <input type="number" id="accountBalance" placeholder="100000" 
+                                class="w-full pl-7 pr-3 py-2 rounded-lg border border-slate-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition-all text-base font-medium"
                                 oninput="calculatePosition()">
                         </div>
                     </div>
 
-                    <!-- Stop Loss Price Input -->
-                    <div id="stopPriceInput" class="input-group">
-                        <label class="block text-sm font-semibold text-slate-600 mb-2">止损价格 (元)</label>
-                        <div class="relative">
-                            <span class="absolute left-3 top-1/2 -translate-y-1/2 text-green-500 font-bold">¥</span>
-                            <input type="number" id="stopPrice" placeholder="0.00" step="0.01"
-                                class="w-full pl-8 pr-3 py-3 rounded-xl stop-input outline-none transition-all text-lg font-medium"
-                                oninput="calculateFromStopPrice()">
+                    <div class="compact-section">
+                        <label class="block compact-label font-semibold text-slate-600 mb-1.5">单笔最大风险</label>
+                        <div class="grid grid-cols-4 gap-2">
+                            <button onclick="setRisk(1)" id="risk-1" class="risk-btn compact-btn py-1.5 rounded-lg border border-slate-200 font-medium hover:border-blue-300">1%</button>
+                            <button onclick="setRisk(2)" id="risk-2" class="risk-btn active compact-btn py-1.5 rounded-lg border border-slate-200 font-medium hover:border-blue-300">2%</button>
+                            <button onclick="setRisk(3)" id="risk-3" class="risk-btn compact-btn py-1.5 rounded-lg border border-slate-200 font-medium hover:border-blue-300">3%</button>
+                            <button onclick="setRisk(4)" id="risk-4" class="risk-btn compact-btn py-1.5 rounded-lg border border-slate-200 font-medium hover:border-blue-300">4%</button>
+                        </div>
+                        <input type="hidden" id="riskPercent" value="2">
+                    </div>
+
+                    <div class="compact-section">
+                        <label class="block compact-label font-semibold text-slate-600 mb-1.5">开仓类型</label>
+                        <div class="grid grid-cols-2 gap-2">
+                            <button onclick="setTradeType('B1')" id="type-B1" class="type-btn active py-2 px-3 rounded-lg border border-slate-200 font-medium flex items-center justify-center gap-2">
+                                <span class="font-bold">B1</span>
+                                <span class="text-xs opacity-80">类B1</span>
+                            </button>
+                            <button onclick="setTradeType('B2')" id="type-B2" class="type-btn py-2 px-3 rounded-lg border border-slate-200 font-medium flex items-center justify-center gap-2">
+                                <span class="font-bold">B2</span>
+                                <span class="text-xs opacity-80">突破</span>
+                            </button>
+                        </div>
+                        <input type="hidden" id="tradeType" value="B1">
+                    </div>
+
+                    <div class="compact-section">
+                        <label class="block compact-label font-semibold text-slate-600 mb-1.5">止损计算方式</label>
+                        <div class="flex gap-2 p-1 bg-slate-100 rounded-lg">
+                            <button onclick="setStopMode('price')" id="mode-price" class="mode-btn active flex-1 py-1.5 px-3 rounded-md text-sm font-medium transition-all">固定价格</button>
+                            <button onclick="setStopMode('percent')" id="mode-percent" class="mode-btn flex-1 py-1.5 px-3 rounded-md text-sm font-medium transition-all text-slate-600 hover:text-slate-800">固定百分比</button>
                         </div>
                     </div>
 
-                    <!-- Stop Loss Percent Input (Hidden by default) -->
-                    <div id="stopPercentInput" class="input-group hidden">
-                        <label class="block text-sm font-semibold text-slate-600 mb-2">止损百分比 (%)</label>
-                        <div class="relative">
-                            <span class="absolute left-3 top-1/2 -translate-y-1/2 text-green-500 font-bold">-</span>
-                            <input type="number" id="stopPercent" placeholder="例如: 5" step="0.1" min="0.1" max="50"
-                                class="w-full pl-8 pr-8 py-3 rounded-xl stop-input outline-none transition-all text-lg font-medium"
-                                oninput="calculateFromStopPercent()">
-                            <span class="absolute right-3 top-1/2 -translate-y-1/2 text-green-400 text-sm">%</span>
+                    <div class="grid grid-cols-2 gap-3 mb-1">
+                        <div class="input-group">
+                            <label class="block compact-label font-semibold text-slate-600 mb-1">开仓价格 (元)</label>
+                            <div class="relative">
+                                <span class="absolute left-2.5 top-1/2 -translate-y-1/2 text-red-500 font-bold text-sm">¥</span>
+                                <input type="number" id="entryPrice" placeholder="0.00" step="0.01"
+                                    class="w-full pl-6 pr-2 py-2 rounded-lg entry-input outline-none transition-all text-base font-medium"
+                                    oninput="calculatePosition()">
+                            </div>
+                        </div>
+
+                        <div id="stopPriceInput" class="input-group">
+                            <label class="block compact-label font-semibold text-slate-600 mb-1">止损价格 (元)</label>
+                            <div class="relative">
+                                <span class="absolute left-2.5 top-1/2 -translate-y-1/2 text-green-500 font-bold text-sm">¥</span>
+                                <input type="number" id="stopPrice" placeholder="0.00" step="0.01"
+                                    class="w-full pl-6 pr-2 py-2 rounded-lg stop-input outline-none transition-all text-base font-medium"
+                                    oninput="calculateFromStopPrice()">
+                            </div>
+                        </div>
+
+                        <div id="stopPercentInput" class="input-group hidden">
+                            <label class="block compact-label font-semibold text-slate-600 mb-1">止损百分比 (%)</label>
+                            <div class="relative">
+                                <span class="absolute left-2.5 top-1/2 -translate-y-1/2 text-green-500 font-bold text-sm">-</span>
+                                <input type="number" id="stopPercent" placeholder="5" step="0.1" min="0.1" max="50"
+                                    class="w-full pl-6 pr-6 py-2 rounded-lg stop-input outline-none transition-all text-base font-medium"
+                                    oninput="calculateFromStopPercent()">
+                                <span class="absolute right-2 top-1/2 -translate-y-1/2 text-green-400 text-xs">%</span>
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <!-- Dynamic Info Display (bottom right of the row) -->
-                <div class="text-right mb-6">
-                    <div id="priceModeInfo" class="text-sm text-slate-500">
-                        对应止损幅度: <span class="font-medium text-green-600">--%</span>
-                    </div>
-                    <div id="percentModeInfo" class="text-sm text-slate-500 hidden">
-                        对应止损价格: <span class="font-medium text-green-600">¥--</span>
+                    <div class="text-right text-xs text-slate-500 mb-2">
+                        <span id="priceModeInfo">对应止损幅度: <span class="font-medium text-green-600">--%</span></span>
+                        <span id="percentModeInfo" class="hidden">对应止损价格: <span class="font-medium text-green-600">¥--</span></span>
                     </div>
                 </div>
 
+                <!-- Right Panel -->
+                <div class="space-y-4">
+                    <div class="glass-panel rounded-xl p-5 shadow-2xl">
+                        <h2 class="text-xl font-bold mb-4 text-slate-800 flex items-center gap-2">
+                            <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
+                            </svg>
+                            计算结果
+                        </h2>
+
+                        <div id="resultsContainer" class="space-y-3 opacity-50 pointer-events-none">
+                            <div class="grid grid-cols-2 gap-3">
+                                <div class="result-card compact-card rounded-lg border-l-purple-500">
+                                    <div class="text-xs text-slate-500 mb-0.5">开仓总金额</div>
+                                    <div class="text-xl font-bold text-slate-800">¥<span id="positionValue">0</span></div>
+                                </div>
+                                <div class="result-card compact-card rounded-lg border-l-green-500">
+                                    <div class="text-xs text-slate-500 mb-0.5">开仓股数</div>
+                                    <div class="text-xl font-bold text-slate-800"><span id="positionShares">0</span> <span class="text-xs font-normal text-slate-500">股</span></div>
+                                </div>
+                            </div>
+
+                            <div class="result-card compact-card rounded-lg">
+                                <div class="text-xs text-slate-500 mb-0.5">单笔风险金额</div>
+                                <div class="text-lg font-bold highlight-number">¥<span id="riskAmount">0</span></div>
+                                <div class="text-xs text-slate-400 mt-0.5">占账户 <span id="riskPercentDisplay">2%</span></div>
+                            </div>
+
+                            <div class="target-card compact-card rounded-lg">
+                                <div class="flex items-center justify-between mb-2">
+                                    <div class="text-xs font-semibold text-emerald-800 flex items-center gap-1">
+                                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
+                                        </svg>
+                                        目标收益点位
+                                    </div>
+                                    <span class="rr-badge px-1.5 py-0.5 rounded text-xs" id="targetRRBadge">10:1</span>
+                                </div>
+                                <div class="grid grid-cols-2 gap-3">
+                                    <div>
+                                        <div class="text-xs text-emerald-600 mb-0.5">目标价格</div>
+                                        <div class="text-lg font-bold target-number">¥<span id="targetPrice">0</span></div>
+                                    </div>
+                                    <div>
+                                        <div class="text-xs text-emerald-600 mb-0.5">预期收益</div>
+                                        <div class="text-base font-bold text-emerald-700">¥<span id="targetProfit">0</span></div>
+                                    </div>
+                                </div>
+                                <div class="mt-2 pt-2 border-t border-emerald-200 flex justify-between text-xs">
+                                    <span class="text-emerald-600">上涨空间</span>
+                                    <span class="font-bold text-emerald-700">+<span id="targetUpPercent">0</span>%</span>
+                                </div>
+                            </div>
+
+                            <div class="bg-slate-50 rounded-lg p-3 space-y-1 text-xs">
+                                <div class="flex justify-between py-0.5 border-b border-slate-200">
+                                    <span class="text-slate-600">每股风险</span>
+                                    <span class="font-medium">¥<span id="riskPerShare">0</span></span>
+                                </div>
+                                <div class="flex justify-between py-0.5 border-b border-slate-200">
+                                    <span class="text-slate-600">止损幅度</span>
+                                    <span class="font-medium text-red-600">-<span id="stopLossPercent">0</span>%</span>
+                                </div>
+                                <div class="flex justify-between py-0.5">
+                                    <span class="text-slate-600">资金利用率</span>
+                                    <span class="font-medium text-blue-600"><span id="capitalUsage">0</span>%</span>
+                                </div>
+                            </div>
+
+                            <div id="warningBox" class="hidden bg-amber-50 border border-amber-200 rounded-lg p-3 flex items-start gap-2 text-xs">
+                                <svg class="w-4 h-4 text-amber-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+                                </svg>
+                                <div class="text-amber-800" id="warningText"></div>
+                            </div>
+                        </div>
+
+                        <div id="emptyState" class="text-center py-8 text-slate-400">
+                            <svg class="w-12 h-12 mx-auto mb-3 opacity-30" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
+                            </svg>
+                            <p class="text-sm">请输入交易参数查看计算结果</p>
+                        </div>
+                    </div>
+
+                    <div class="glass-panel rounded-xl p-4 shadow-xl">
+                        <h3 class="font-bold text-slate-800 mb-2 flex items-center gap-2 text-sm">
+                            <svg class="w-4 h-4 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            高倍盈亏比交易提示
+                        </h3>
+                        <ul class="space-y-1 text-xs text-slate-600">
+                            <li class="flex items-start gap-1.5">
+                                <span class="text-emerald-500 mt-0.5">•</span>
+                                <span><strong>B1 (10:1)</strong>：止损控制在1~4%，越小越好</span>
+                            </li>
+                            <li class="flex items-start gap-1.5">
+                                <span class="text-emerald-500 mt-0.5">•</span>
+                                <span><strong>B2 (5:1)</strong>：止损控制在10%以内</span>
+                            </li>
+                            <li class="flex items-start gap-1.5">
+                                <span class="text-emerald-500 mt-0.5">•</span>
+                                <span>A股最小交易单位100股，已自动调整</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
             </div>
+        </div>
 
-            <!-- Right Panel: Results -->
-            <div class="space-y-6">
-                <!-- Main Results Card -->
-                <div class="glass-panel rounded-2xl p-6 md:p-8 shadow-2xl">
-                    <h2 class="text-2xl font-bold mb-6 text-slate-800 flex items-center gap-2">
-                        <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
+        <!-- Page 2: Pit Calculator -->
+        <div id="page-pit" class="page-container">
+            <div class="grid lg:grid-cols-2 gap-4">
+                <div class="glass-panel rounded-xl p-5 shadow-2xl">
+                    <h2 class="text-xl font-bold mb-4 text-slate-800 flex items-center gap-2">
+                        <svg class="w-5 h-5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
                         </svg>
-                        计算结果
+                        出坑计算参数
                     </h2>
 
-                    <div id="resultsContainer" class="space-y-4 opacity-50 pointer-events-none">
-                        <!-- Position Value (Priority 1) -->
-                        <div class="result-card p-4 rounded-xl border-l-purple-500">
-                            <div class="text-sm text-slate-500 mb-1">开仓总金额</div>
-                            <div class="text-3xl font-bold text-slate-800">¥<span id="positionValue">0</span></div>
-                        </div>
-
-                        <!-- Position Shares (Priority 2) -->
-                        <div class="result-card p-4 rounded-xl border-l-green-500">
-                            <div class="text-sm text-slate-500 mb-1">开仓股数</div>
-                            <div class="text-3xl font-bold text-slate-800">
-                                <span id="positionShares">0</span> 
-                                <span class="text-sm font-normal text-slate-500">股</span>
+                    <div class="grid grid-cols-3 gap-3 mb-3">
+                        <div class="input-group">
+                            <label class="block compact-label font-semibold text-slate-600 mb-1">坑口价格</label>
+                            <div class="relative">
+                                <span class="absolute left-2 top-1/2 -translate-y-1/2 text-yellow-600 font-bold text-xs">¥</span>
+                                <input type="number" id="pitTopPrice" placeholder="50" step="0.01"
+                                    class="w-full pl-5 pr-2 py-2 rounded-lg pit-top-input outline-none transition-all text-sm font-medium"
+                                    oninput="calculatePit()">
                             </div>
                         </div>
-
-                        <!-- Risk Amount (Priority 3) -->
-                        <div class="result-card p-4 rounded-xl">
-                            <div class="text-sm text-slate-500 mb-1">单笔风险金额</div>
-                            <div class="text-2xl font-bold highlight-number">¥<span id="riskAmount">0</span></div>
-                            <div class="text-xs text-slate-400 mt-1">占账户 <span id="riskPercentDisplay">2%</span></div>
-                        </div>
-
-                        <!-- Target Price Section (High R:R) - Yellow Badge Only -->
-                        <div class="target-card p-4 rounded-xl mt-4">
-                            <div class="flex items-center justify-between mb-3">
-                                <div class="text-sm font-semibold text-emerald-800 flex items-center gap-2">
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
-                                    </svg>
-                                    目标收益点位
-                                </div>
-                                <span class="rr-badge px-2 py-1 rounded text-xs" id="targetRRBadge">10:1</span>
-                            </div>
-                            <div class="grid grid-cols-2 gap-4">
-                                <div>
-                                    <div class="text-xs text-emerald-600 mb-1">目标价格</div>
-                                    <div class="text-2xl font-bold target-number">¥<span id="targetPrice">0</span></div>
-                                </div>
-                                <div>
-                                    <div class="text-xs text-emerald-600 mb-1">预期收益</div>
-                                    <div class="text-lg font-bold text-emerald-700">¥<span id="targetProfit">0</span></div>
-                                </div>
-                            </div>
-                            <div class="mt-3 pt-3 border-t border-emerald-200 flex justify-between text-sm">
-                                <span class="text-emerald-600">上涨空间</span>
-                                <span class="font-bold text-emerald-700">+<span id="targetUpPercent">0</span>%</span>
+                        <div class="input-group">
+                            <label class="block compact-label font-semibold text-slate-600 mb-1">坑底价格</label>
+                            <div class="relative">
+                                <span class="absolute left-2 top-1/2 -translate-y-1/2 text-green-600 font-bold text-xs">¥</span>
+                                <input type="number" id="pitBottomPrice" placeholder="30" step="0.01"
+                                    class="w-full pl-5 pr-2 py-2 rounded-lg pit-bottom-input outline-none transition-all text-sm font-medium"
+                                    oninput="calculatePit()">
                             </div>
                         </div>
-
-                        <!-- Risk Details -->
-                        <div class="bg-slate-50 rounded-xl p-4 space-y-2 text-sm">
-                            <div class="flex justify-between py-1 border-b border-slate-200">
-                                <span class="text-slate-600">每股风险</span>
-                                <span class="font-medium">¥<span id="riskPerShare">0</span></span>
-                            </div>
-                            <div class="flex justify-between py-1 border-b border-slate-200">
-                                <span class="text-slate-600">止损幅度</span>
-                                <span class="font-medium text-red-600">-<span id="stopLossPercent">0</span>%</span>
-                            </div>
-                            <div class="flex justify-between py-1">
-                                <span class="text-slate-600">资金利用率</span>
-                                <span class="font-medium text-blue-600"><span id="capitalUsage">0</span>%</span>
+                        <div class="input-group">
+                            <label class="block compact-label font-semibold text-slate-600 mb-1">当前价格</label>
+                            <div class="relative">
+                                <span class="absolute left-2 top-1/2 -translate-y-1/2 text-blue-600 font-bold text-xs">¥</span>
+                                <input type="number" id="pitCurrentPrice" placeholder="45" step="0.01"
+                                    class="w-full pl-5 pr-2 py-2 rounded-lg pit-current-input outline-none transition-all text-sm font-medium"
+                                    oninput="calculatePit()">
                             </div>
                         </div>
+                    </div>
 
-                        <!-- Warning Messages -->
-                        <div id="warningBox" class="hidden bg-amber-50 border border-amber-200 rounded-xl p-4 flex items-start gap-3">
-                            <svg class="w-5 h-5 text-amber-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+                    <div class="p-3 bg-amber-50 rounded-lg border border-amber-200">
+                        <h4 class="font-semibold text-amber-900 mb-1.5 flex items-center gap-1.5 text-xs">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                             </svg>
-                            <div class="text-sm text-amber-800" id="warningText"></div>
+                            计算公式
+                        </h4>
+                        <div class="text-xs text-amber-800 space-y-0.5">
+                            <div>• 出坑目标价 = 坑口 × 2 - 坑底</div>
+                            <div>• 潜在利润 = (目标价 - 当前价) / 当前价 × 100%</div>
+                        </div>
+                        <p class="text-xs text-amber-600 mt-1.5 font-medium">注：该价位为经验价格，仅供参考</p>
+                    </div>
+                </div>
+
+                <div class="space-y-4">
+                    <div class="glass-panel rounded-xl p-5 shadow-2xl">
+                        <h2 class="text-xl font-bold mb-4 text-slate-800 flex items-center gap-2">
+                            <svg class="w-5 h-5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                            </svg>
+                            出坑计算结果
+                        </h2>
+
+                        <div id="pitResultsContainer" class="space-y-3 opacity-50 pointer-events-none">
+                            <div class="grid grid-cols-2 gap-3">
+                                <div class="pit-target-card compact-card rounded-lg">
+                                    <div class="text-xs text-yellow-800 mb-0.5">出坑目标价</div>
+                                    <div class="text-xl font-bold pit-number-target">¥<span id="pitTargetPrice">0</span></div>
+                                    <div class="text-xs text-yellow-700 mt-0.5">经验目标价位</div>
+                                </div>
+                                <div class="pit-profit-card compact-card rounded-lg">
+                                    <div class="text-xs text-red-800 mb-0.5">潜在利润空间</div>
+                                    <div class="text-xl font-bold pit-number-profit">+<span id="pitProfitPercent">0</span>%</div>
+                                    <div class="text-xs text-red-700 mt-0.5">基于当前价格</div>
+                                </div>
+                            </div>
+
+                            <div class="bg-slate-50 rounded-lg p-3 space-y-1 text-xs">
+                                <div class="flex justify-between py-0.5 border-b border-slate-200">
+                                    <span class="text-slate-600">坑口价格</span>
+                                    <span class="font-medium text-yellow-600">¥<span id="displayPitTop">0</span></span>
+                                </div>
+                                <div class="flex justify-between py-0.5 border-b border-slate-200">
+                                    <span class="text-slate-600">坑底价格</span>
+                                    <span class="font-medium text-green-600">¥<span id="displayPitBottom">0</span></span>
+                                </div>
+                                <div class="flex justify-between py-0.5 border-b border-slate-200">
+                                    <span class="text-slate-600">当前价格</span>
+                                    <span class="font-medium text-blue-600">¥<span id="displayPitCurrent">0</span></span>
+                                </div>
+                                <div class="flex justify-between py-0.5">
+                                    <span class="text-slate-600">坑深度</span>
+                                    <span class="font-medium text-amber-600">-<span id="pitDepth">0</span>%</span>
+                                </div>
+                            </div>
+
+                            <div id="pitWarningBox" class="hidden warning-box rounded-lg p-3 flex items-start gap-2 text-xs">
+                                <svg class="w-4 h-4 text-amber-700 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+                                </svg>
+                                <div class="text-amber-900" id="pitWarningText"></div>
+                            </div>
+                        </div>
+
+                        <div id="pitEmptyState" class="text-center py-8 text-slate-400">
+                            <svg class="w-12 h-12 mx-auto mb-3 opacity-30" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
+                            </svg>
+                            <p class="text-sm">请输入坑口、坑底和当前价格</p>
                         </div>
                     </div>
 
-                    <div id="emptyState" class="text-center py-12 text-slate-400">
-                        <svg class="w-16 h-16 mx-auto mb-4 opacity-30" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
+                    <div class="glass-panel rounded-xl p-4 shadow-xl">
+                        <h3 class="font-bold text-slate-800 mb-2 flex items-center gap-2 text-sm">
+                            <svg class="w-4 h-4 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            出坑交易提示
+                        </h3>
+                        <ul class="space-y-1 text-xs text-slate-600">
+                            <li class="flex items-start gap-1.5">
+                                <span class="text-yellow-500 mt-0.5">•</span>
+                                <span>出坑目标价基于经验公式，建议回测标的以往吻合率</span>
+                            </li>
+                            <li class="flex items-start gap-1.5">
+                                <span class="text-green-500 mt-0.5">•</span>
+                                <span>实际交易需结合量价关系、市场情绪等因素综合判断</span>
+                            </li>
+                            <li class="flex items-start gap-1.5">
+                                <span class="text-blue-500 mt-0.5">•</span>
+                                <span>价格有效突破坑口后，出坑价格才有意义</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Page 3: Profit Protection -->
+        <div id="page-protect" class="page-container">
+            <div class="grid lg:grid-cols-2 gap-4">
+                <div class="glass-panel rounded-xl p-5 shadow-2xl">
+                    <h2 class="text-xl font-bold mb-4 text-slate-800 flex items-center gap-2">
+                        <svg class="w-5 h-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
                         </svg>
-                        <p>请输入交易参数查看计算结果</p>
+                        回撤利润保护参数
+                    </h2>
+
+                    <div class="grid grid-cols-3 gap-3 mb-3">
+                        <div class="input-group">
+                            <label class="block compact-label font-semibold text-slate-600 mb-1">买入价格</label>
+                            <div class="relative">
+                                <span class="absolute left-2 top-1/2 -translate-y-1/2 text-indigo-500 font-bold text-xs">¥</span>
+                                <input type="number" id="protectEntryPrice" placeholder="50" step="0.01"
+                                    class="w-full pl-5 pr-2 py-2 rounded-lg border-2 border-indigo-200 bg-indigo-50 outline-none transition-all text-sm font-medium focus:border-indigo-500"
+                                    oninput="calculateProtection()">
+                            </div>
+                        </div>
+                        <div class="input-group">
+                            <label class="block compact-label font-semibold text-slate-600 mb-1">最高价格</label>
+                            <div class="relative">
+                                <span class="absolute left-2 top-1/2 -translate-y-1/2 text-indigo-500 font-bold text-xs">¥</span>
+                                <input type="number" id="protectHighPrice" placeholder="65" step="0.01"
+                                    class="w-full pl-5 pr-2 py-2 rounded-lg border-2 border-indigo-200 bg-indigo-50 outline-none transition-all text-sm font-medium focus:border-indigo-500"
+                                    oninput="calculateProtection()">
+                            </div>
+                        </div>
+                        <div class="input-group">
+                            <label class="block compact-label font-semibold text-slate-600 mb-1">止损价格</label>
+                            <div class="relative">
+                                <span class="absolute left-2 top-1/2 -translate-y-1/2 text-red-500 font-bold text-xs">¥</span>
+                                <input type="number" id="protectStopPrice" placeholder="45" step="0.01"
+                                    class="w-full pl-5 pr-2 py-2 rounded-lg border-2 border-red-200 bg-red-50 outline-none transition-all text-sm font-medium focus:border-red-500"
+                                    oninput="calculateProtection()">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="compact-section">
+                        <label class="block compact-label font-semibold text-slate-600 mb-1.5">预期盈亏比</label>
+                        <div class="grid grid-cols-6 gap-2 mb-2">
+                            <button onclick="setProtectRR(10)" id="protect-rr-10" class="rr-btn active compact-btn py-1.5 rounded-lg border border-slate-200 font-medium hover:border-blue-300">10:1</button>
+                            <button onclick="setProtectRR(5)" id="protect-rr-5" class="rr-btn compact-btn py-1.5 rounded-lg border border-slate-200 font-medium hover:border-blue-300">5:1</button>
+                            <button onclick="setProtectRR(3)" id="protect-rr-3" class="rr-btn compact-btn py-1.5 rounded-lg border border-slate-200 font-medium hover:border-blue-300">3:1</button>
+                            <div class="col-span-3">
+                                <select id="customRR" onchange="setCustomProtectRR()" 
+                                    class="w-full px-2 py-1.5 rounded-lg custom-rr-select outline-none transition-all text-xs font-medium">
+                                    <option value="">自定义...</option>
+                                    <option value="20">20:1</option>
+                                    <option value="18">18:1</option>
+                                    <option value="16">16:1</option>
+                                    <option value="14">14:1</option>
+                                    <option value="12">12:1</option>
+                                    <option value="8">8:1</option>
+                                    <option value="6">6:1</option>
+                                    <option value="4">4:1</option>
+                                    <option value="2">2:1</option>
+                                </select>
+                            </div>
+                        </div>
+                        <input type="hidden" id="protectRR" value="10">
+                    </div>
+
+                    <div class="p-3 bg-indigo-50 rounded-lg border border-indigo-200">
+                        <div class="flex items-center gap-3">
+                            <span class="text-xs text-indigo-700 font-medium">利润回撤</span>
+                            <input type="number" id="retracePercent" value="35" min="10" max="80" step="5"
+                                class="w-16 px-2 py-1.5 rounded-lg border border-indigo-300 text-center font-medium text-indigo-900 text-sm"
+                                oninput="calculateProtection()">
+                            <span class="text-xs text-indigo-700">%时止盈</span>
+                        </div>
                     </div>
                 </div>
 
-                <!-- Quick Tips -->
-                <div class="glass-panel rounded-2xl p-6 shadow-xl">
-                    <h3 class="font-bold text-slate-800 mb-3 flex items-center gap-2">
-                        <svg class="w-5 h-5 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                        </svg>
-                        高倍盈亏比交易提示
-                    </h3>
-                    <ul class="space-y-2 text-sm text-slate-600">
-                        <li class="flex items-start gap-2">
-                            <span class="text-emerald-500 mt-1">•</span>
-                            <span><strong>B1类型 (10:1)</strong>：建议止损控制在1~4%以内，越小越好，追求极致盈亏比</span>
-                        </li>
-                        <li class="flex items-start gap-2">
-                            <span class="text-emerald-500 mt-1">•</span>
-                            <span><strong>B2类型 (5:1)</strong>：建议止损控制在10%以内，平衡胜率效率与盈亏比</span>
-                        </li>
-                        <li class="flex items-start gap-2">
-                            <span class="text-emerald-500 mt-1">•</span>
-                            <span>A股最小交易单位为100股（1手），已自动调整</span>
-                        </li>
-                    </ul>
+                <div class="space-y-4">
+                    <div class="glass-panel rounded-xl p-5 shadow-2xl">
+                        <h2 class="text-xl font-bold mb-4 text-slate-800 flex items-center gap-2">
+                            <svg class="w-5 h-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                            </svg>
+                            回撤保护计算结果
+                        </h2>
+
+                        <div id="protectResultsContainer" class="space-y-3 opacity-50 pointer-events-none">
+                            <div id="protectStatusBox" class="hidden rounded-lg p-3 flex items-center gap-2">
+                                <div id="protectStatusIcon"></div>
+                                <div>
+                                    <div id="protectStatusTitle" class="font-bold text-sm"></div>
+                                    <div id="protectStatusDesc" class="text-xs opacity-80"></div>
+                                </div>
+                            </div>
+
+                            <div class="protect-card compact-card rounded-lg">
+                                <div class="text-xs text-indigo-800 mb-0.5">实际盈亏比</div>
+                                <div class="text-xl font-bold protect-number"><span id="actualRR">0</span>:1</div>
+                                <div class="text-xs text-indigo-600 mt-0.5">目标: <span id="targetRRDisplay">10</span>:1</div>
+                            </div>
+
+                            <div id="retraceResultBox" class="hidden">
+                                <div class="grid grid-cols-2 gap-3 mb-3">
+                                    <div class="protect-card compact-card rounded-lg border-l-green-500">
+                                        <div class="text-xs text-indigo-800 mb-0.5">回撤止盈价格</div>
+                                        <div class="text-lg font-bold text-indigo-900">¥<span id="retracePrice">0</span></div>
+                                    </div>
+                                    <div class="protect-card compact-card rounded-lg border-l-amber-500">
+                                        <div class="text-xs text-indigo-800 mb-0.5">回撤幅度</div>
+                                        <div class="text-lg font-bold text-amber-600">-<span id="retracePercentDisplay">35</span>%</div>
+                                    </div>
+                                </div>
+                                
+                                <div class="p-3 bg-indigo-50 rounded-lg border border-indigo-200">
+                                    <div class="text-xs text-indigo-800 mb-1.5 font-medium">利润保护详情</div>
+                                    <div class="space-y-1 text-xs">
+                                        <div class="flex justify-between">
+                                            <span class="text-slate-600">买入价格</span>
+                                            <span class="font-medium">¥<span id="displayEntry">0</span></span>
+                                        </div>
+                                        <div class="flex justify-between">
+                                            <span class="text-slate-600">最高价格</span>
+                                            <span class="font-medium text-green-600">¥<span id="displayHigh">0</span></span>
+                                        </div>
+                                        <div class="flex justify-between">
+                                            <span class="text-slate-600">最大浮盈</span>
+                                            <span class="font-medium text-green-600">+<span id="maxProfit">0</span>%</span>
+                                        </div>
+                                        <div class="flex justify-between border-t border-indigo-200 pt-1">
+                                            <span class="text-slate-600">回撤止盈价</span>
+                                            <span class="font-bold text-indigo-900">¥<span id="displayRetrace">0</span></span>
+                                        </div>
+                                        <div class="flex justify-between">
+                                            <span class="text-slate-600">锁定利润</span>
+                                            <span class="font-bold text-amber-600">+<span id="lockedProfit">0</span>%</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div id="notReachedBox" class="hidden bg-slate-100 rounded-lg p-4 text-center">
+                                <svg class="w-10 h-10 mx-auto mb-2 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                                <div class="text-base font-medium text-slate-600">未达到目标收益</div>
+                                <div class="text-xs text-slate-500 mt-0.5">当前盈亏比未达到设定目标</div>
+                            </div>
+                        </div>
+
+                        <div id="protectEmptyState" class="text-center py-8 text-slate-400">
+                            <svg class="w-12 h-12 mx-auto mb-3 opacity-30" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+                            </svg>
+                            <p class="text-sm">请输入价格参数查看保护计算</p>
+                        </div>
+                    </div>
+
+                    <div class="glass-panel rounded-xl p-4 shadow-xl">
+                        <h3 class="font-bold text-slate-800 mb-2 flex items-center gap-2 text-sm">
+                            <svg class="w-4 h-4 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            利润保护提示
+                        </h3>
+                        <ul class="space-y-1 text-xs text-slate-600">
+                            <li class="flex items-start gap-1.5">
+                                <span class="text-indigo-500 mt-0.5">•</span>
+                                <span>达到预期盈亏比后，建议启动利润保护机制</span>
+                            </li>
+                            <li class="flex items-start gap-1.5">
+                                <span class="text-indigo-500 mt-0.5">•</span>
+                                <span>默认35%回撤止盈可根据市场波动性和个人策略调整</span>
+                            </li>
+                            <li class="flex items-start gap-1.5">
+                                <span class="text-indigo-500 mt-0.5">•</span>
+                                <span>未达到目标收益前，且无离场信号时，让利润奔跑</span>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <!-- Creator Info -->
-        <div class="mt-8 text-center">
-            <div class="inline-block creator-info px-6 py-3 rounded-full text-sm font-medium shadow-lg">
-                <span class="flex items-center gap-2">
-                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/>
-                    </svg>
-                    制作者：B站 知行图表交易
-                </span>
+        <!-- Creator Info & Disclaimer -->
+        <div class="mt-6 space-y-3">
+            <div class="text-center">
+                <div class="inline-block creator-info px-5 py-2.5 rounded-full text-sm font-medium shadow-lg">
+                    <span class="flex items-center gap-2">
+                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/>
+                        </svg>
+                        制作者：B站 知行图表交易
+                    </span>
+                </div>
+            </div>
+
+            <div class="text-center">
+                <div class="inline-block disclaimer px-5 py-2.5 rounded-xl text-xs text-slate-400">
+                    <span class="flex items-center gap-2">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+                        </svg>
+                        仅用于价格计算，不构成任何投资建议
+                    </span>
+                </div>
             </div>
         </div>
+
     </div>
 
     <script>
+        // Global variables
         let currentStopMode = 'price';
         let currentRiskPercent = 2;
         let currentTradeType = 'B1';
+        let currentProtectRR = 10;
         const RR_RATIOS = { 'B1': 10, 'B2': 5 };
 
+        // Tab switching
+        function switchTab(tabName) {
+            document.querySelectorAll('.page-container').forEach(page => {
+                page.classList.remove('active');
+            });
+            
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+                btn.classList.add('text-slate-600');
+            });
+            
+            document.getElementById(`page-${tabName}`).classList.add('active');
+            
+            const activeBtn = document.getElementById(`tab-${tabName}`);
+            activeBtn.classList.add('active');
+            activeBtn.classList.remove('text-slate-600');
+        }
+
+        // Position Calculator Functions
         function setRisk(percent) {
             currentRiskPercent = percent;
             document.getElementById('riskPercent').value = percent;
@@ -373,11 +850,11 @@
             currentStopMode = mode;
             
             document.getElementById('mode-price').className = mode === 'price' 
-                ? 'mode-btn active flex-1 py-2 px-4 rounded-lg text-sm font-medium transition-all'
-                : 'mode-btn flex-1 py-2 px-4 rounded-lg text-sm font-medium transition-all text-slate-600 hover:text-slate-800';
+                ? 'mode-btn active flex-1 py-1.5 px-3 rounded-md text-sm font-medium transition-all'
+                : 'mode-btn flex-1 py-1.5 px-3 rounded-md text-sm font-medium transition-all text-slate-600 hover:text-slate-800';
             document.getElementById('mode-percent').className = mode === 'percent'
-                ? 'mode-btn active flex-1 py-2 px-4 rounded-lg text-sm font-medium transition-all'
-                : 'mode-btn flex-1 py-2 px-4 rounded-lg text-sm font-medium transition-all text-slate-600 hover:text-slate-800';
+                ? 'mode-btn active flex-1 py-1.5 px-3 rounded-md text-sm font-medium transition-all'
+                : 'mode-btn flex-1 py-1.5 px-3 rounded-md text-sm font-medium transition-all text-slate-600 hover:text-slate-800';
             
             if (mode === 'price') {
                 document.getElementById('stopPriceInput').classList.remove('hidden');
@@ -447,12 +924,10 @@
                 return;
             }
 
-            // Core calculations
             const riskAmount = balance * (riskPercent / 100);
             const riskPerShare = entry - stop;
             let shares = Math.floor(riskAmount / riskPerShare);
             
-            // A股100股整数倍调整
             const originalShares = shares;
             shares = Math.floor(shares / 100) * 100;
             if (shares < 100) shares = 100;
@@ -462,53 +937,46 @@
             const capitalUsage = (positionValue / balance * 100).toFixed(2);
             const stopLossPercent = ((entry - stop) / entry * 100).toFixed(2);
             
-            // Target calculations (High R:R)
             const targetPrice = entry + (riskPerShare * rrRatio);
             const targetProfit = shares * (targetPrice - entry);
             const targetUpPercent = ((targetPrice - entry) / entry * 100).toFixed(2);
 
-            // Update UI
             document.getElementById('resultsContainer').classList.remove('opacity-50', 'pointer-events-none');
             document.getElementById('emptyState').classList.add('hidden');
             
-            // Priority display order: 1. Position Value, 2. Shares, 3. Risk Amount
             document.getElementById('positionValue').textContent = positionValue.toFixed(2);
             document.getElementById('positionShares').textContent = shares.toLocaleString();
             document.getElementById('riskAmount').textContent = riskAmount.toFixed(2);
-            
             document.getElementById('riskPercentDisplay').textContent = riskPercent + '%';
             document.getElementById('riskPerShare').textContent = riskPerShare.toFixed(2);
             document.getElementById('stopLossPercent').textContent = stopLossPercent;
             document.getElementById('capitalUsage').textContent = capitalUsage;
             
-            // Target updates
             document.getElementById('targetPrice').textContent = targetPrice.toFixed(2);
             document.getElementById('targetProfit').textContent = targetProfit.toFixed(2);
             document.getElementById('targetUpPercent').textContent = targetUpPercent;
 
-            // Update dynamic info based on mode
             if (currentStopMode === 'price') {
                 document.getElementById('priceModeInfo').innerHTML = `对应止损幅度: <span class="font-medium text-green-600">${stopLossPercent}%</span>`;
             } else {
                 document.getElementById('percentModeInfo').innerHTML = `对应止损价格: <span class="font-medium text-green-600">¥${stop.toFixed(2)}</span>`;
             }
 
-            // Warnings
             const warningBox = document.getElementById('warningBox');
             const warningText = document.getElementById('warningText');
             let warnings = [];
 
             if (shares !== originalShares) {
-                warnings.push(`已自动调整为${shares}股（A股最小交易单位100股）。实际风险：¥${actualRisk.toFixed(2)}`);
+                warnings.push(`已自动调整为${shares}股（100股整数倍）。实际风险：¥${actualRisk.toFixed(2)}`);
             }
             if (capitalUsage > 50) {
-                warnings.push('注意：该仓位占用资金超过账户50%，请确保资金分配合理');
+                warnings.push('仓位占用资金超过50%，请注意分配');
             }
             if (stopLossPercent > 10) {
-                warnings.push('止损幅度超过10%，建议考虑缩小止损范围或降低仓位');
+                warnings.push('止损幅度超过10%，建议调整');
             }
             if (parseFloat(targetUpPercent) > 50) {
-                warnings.push(`目标涨幅${targetUpPercent}%较高，请确保趋势足够强劲以支撑${rrRatio}:1盈亏比`);
+                warnings.push(`目标涨幅${targetUpPercent}%较高，确认趋势强度`);
             }
 
             if (warnings.length > 0) {
@@ -524,6 +992,137 @@
             const warningText = document.getElementById('warningText');
             warningBox.classList.remove('hidden');
             warningText.textContent = msg;
+        }
+
+        // Pit Calculator Functions
+        function calculatePit() {
+            const top = parseFloat(document.getElementById('pitTopPrice').value);
+            const bottom = parseFloat(document.getElementById('pitBottomPrice').value);
+            const current = parseFloat(document.getElementById('pitCurrentPrice').value);
+
+            if (!top || !bottom || !current || top <= 0 || bottom <= 0 || current <= 0) {
+                document.getElementById('pitResultsContainer').classList.add('opacity-50', 'pointer-events-none');
+                document.getElementById('pitEmptyState').classList.remove('hidden');
+                return;
+            }
+
+            if (bottom >= top) {
+                showPitWarning('坑底价格必须低于坑口价格');
+                return;
+            }
+
+            const targetPrice = top * 2 - bottom;
+            const profitPercent = ((targetPrice - current) / current * 100).toFixed(2);
+            const pitDepth = ((top - bottom) / top * 100).toFixed(2);
+
+            document.getElementById('pitResultsContainer').classList.remove('opacity-50', 'pointer-events-none');
+            document.getElementById('pitEmptyState').classList.add('hidden');
+            document.getElementById('pitWarningBox').classList.add('hidden');
+
+            document.getElementById('pitTargetPrice').textContent = targetPrice.toFixed(2);
+            document.getElementById('pitProfitPercent').textContent = profitPercent;
+            document.getElementById('displayPitTop').textContent = top.toFixed(2);
+            document.getElementById('displayPitBottom').textContent = bottom.toFixed(2);
+            document.getElementById('displayPitCurrent').textContent = current.toFixed(2);
+            document.getElementById('pitDepth').textContent = pitDepth;
+
+            if (parseFloat(profitPercent) < 0) {
+                showPitWarning('当前价格已超过出坑目标价，请注意风险');
+            }
+        }
+
+        function showPitWarning(msg) {
+            document.getElementById('pitWarningBox').classList.remove('hidden');
+            document.getElementById('pitWarningText').textContent = msg;
+        }
+
+        // Protection Calculator Functions
+        function setProtectRR(rr) {
+            currentProtectRR = rr;
+            document.getElementById('protectRR').value = rr;
+            
+            document.querySelectorAll('.rr-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById(`protect-rr-${rr}`).classList.add('active');
+            
+            document.getElementById('customRR').value = '';
+            document.getElementById('targetRRDisplay').textContent = rr;
+            
+            calculateProtection();
+        }
+
+        function setCustomProtectRR() {
+            const select = document.getElementById('customRR');
+            const value = parseInt(select.value);
+            if (value) {
+                currentProtectRR = value;
+                document.getElementById('protectRR').value = value;
+                
+                document.querySelectorAll('.rr-btn').forEach(btn => btn.classList.remove('active'));
+                document.getElementById('targetRRDisplay').textContent = value;
+                
+                calculateProtection();
+            }
+        }
+
+        function calculateProtection() {
+            const entry = parseFloat(document.getElementById('protectEntryPrice').value);
+            const high = parseFloat(document.getElementById('protectHighPrice').value);
+            const stop = parseFloat(document.getElementById('protectStopPrice').value);
+            const targetRR = parseInt(document.getElementById('protectRR').value);
+            const retracePercent = parseFloat(document.getElementById('retracePercent').value) || 35;
+
+            if (!entry || !high || !stop || entry <= 0 || high <= 0 || stop <= 0) {
+                document.getElementById('protectResultsContainer').classList.add('opacity-50', 'pointer-events-none');
+                document.getElementById('protectEmptyState').classList.remove('hidden');
+                document.getElementById('protectStatusBox').classList.add('hidden');
+                return;
+            }
+
+            const riskPerShare = entry - stop;
+            const actualRR = riskPerShare > 0 ? ((high - entry) / riskPerShare).toFixed(2) : 0;
+            const maxProfitPercent = ((high - entry) / entry * 100).toFixed(2);
+
+            document.getElementById('protectResultsContainer').classList.remove('opacity-50', 'pointer-events-none');
+            document.getElementById('protectEmptyState').classList.add('hidden');
+            document.getElementById('protectStatusBox').classList.remove('hidden');
+
+            document.getElementById('actualRR').textContent = actualRR;
+            document.getElementById('targetRRDisplay').textContent = targetRR;
+
+            const retraceResultBox = document.getElementById('retraceResultBox');
+            const notReachedBox = document.getElementById('notReachedBox');
+            const statusBox = document.getElementById('protectStatusBox');
+
+            if (parseFloat(actualRR) >= targetRR) {
+                retraceResultBox.classList.remove('hidden');
+                notReachedBox.classList.add('hidden');
+                statusBox.className = 'status-success rounded-lg p-3 flex items-center gap-2';
+
+                const profitRange = high - entry;
+                const retraceAmount = profitRange * (retracePercent / 100);
+                const retracePrice = high - retraceAmount;
+                const lockedProfitPercent = ((retracePrice - entry) / entry * 100).toFixed(2);
+
+                document.getElementById('retracePrice').textContent = retracePrice.toFixed(2);
+                document.getElementById('retracePercentDisplay').textContent = retracePercent;
+                document.getElementById('displayEntry').textContent = entry.toFixed(2);
+                document.getElementById('displayHigh').textContent = high.toFixed(2);
+                document.getElementById('maxProfit').textContent = maxProfitPercent;
+                document.getElementById('displayRetrace').textContent = retracePrice.toFixed(2);
+                document.getElementById('lockedProfit').textContent = lockedProfitPercent;
+
+                document.getElementById('protectStatusIcon').innerHTML = '<svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>';
+                document.getElementById('protectStatusTitle').textContent = '目标已达成';
+                document.getElementById('protectStatusDesc').textContent = `盈亏比 ${actualRR}:1 ≥ 目标 ${targetRR}:1，建议启动保护`;
+            } else {
+                retraceResultBox.classList.add('hidden');
+                notReachedBox.classList.remove('hidden');
+                statusBox.className = 'status-warning rounded-lg p-3 flex items-center gap-2';
+
+                document.getElementById('protectStatusIcon').innerHTML = '<svg class="w-6 h-6 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>';
+                document.getElementById('protectStatusTitle').textContent = '未达到目标收益';
+                document.getElementById('protectStatusDesc').textContent = `当前 ${actualRR}:1，距离 ${targetRR}:1 还需上涨`;
+            }
         }
 
         // Initialize
