@@ -313,14 +313,14 @@
                                 <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path>
                                 </svg>
-                                交易参数设置
+                                交易参数
                             </h2>
                             <div class="flex gap-2 bg-slate-100 p-1 rounded-lg">
                                 <button onclick="setPersonalityMode('courage')" id="mode-courage" class="personality-btn active px-3 py-1.5 rounded-md text-xs font-medium flex items-center gap-1">
-                                    <span>💪</span> 勇气模式
+                                    <span>💪</span> 勇气
                                 </button>
                                 <button onclick="setPersonalityMode('sensitive')" id="mode-sensitive" class="personality-btn px-3 py-1.5 rounded-md text-xs font-medium flex items-center gap-1 text-slate-600">
-                                    <span>🧠</span> 敏感模式
+                                    <span>🧠</span> 敏感
                                 </button>
                             </div>
                         </div>
@@ -347,11 +347,11 @@
                             <div class="flex items-center justify-between mb-2">
                                 <div class="flex items-center gap-2">
                                     <label class="block text-xs font-semibold text-slate-600 mb-0 flex items-center">
-                                        单笔最大风险: <span id="riskSliderVal" class="text-blue-600 font-bold ml-1 inline-block w-[45px]">2.00%</span>
+                                        单笔风险: <span id="riskSliderVal" class="text-blue-600 font-bold ml-1 inline-block w-[45px]">2.00%</span>
                                     </label>
                                     
                                     <span id="kellySuggestionBox" class="hidden text-[10px] px-1.5 py-0.5 rounded bg-indigo-50 border border-indigo-100 text-indigo-600 font-medium whitespace-nowrap">
-                                        ✨ 凯利建议: <span id="kellyRange" class="font-bold">--</span>
+                                        凯利建议: <span id="kellyRange" class="font-bold">--</span>
                                     </span>
                                     <a id="kellyGoToSim" href="https://zxchart.github.io/trading-simu/" target="_blank" class="text-[10px] px-1.5 py-0.5 rounded bg-slate-200 border border-slate-300 text-slate-500 hover:text-blue-600 hover:bg-blue-50 transition-colors whitespace-nowrap">
                                         前往模拟器获取建议 ➔
@@ -367,68 +367,64 @@
                         </div>
 
                         <div class="compact-section mt-3">
-                            <div class="flex items-center gap-2 mb-1.5">
-                                <label class="block compact-label font-semibold text-slate-600">开仓类型</label>
-                                <span id="typeRRHint" class="text-xs text-purple-600 font-medium">对应理想盈亏比10:1</span>
+                            <div class="flex items-center justify-between mb-1.5">
+                                <div class="flex items-center gap-2">
+                                    <label class="block compact-label font-semibold text-slate-600 mb-0">开仓</label>
+                                    <span id="typeRRHint" class="text-[10px] text-purple-600 font-medium">对应理想盈亏比10:1</span>
+                                </div>
+                                <select id="tradeHistorySelect" onchange="loadTradeHistory()" class="text-[10px] font-medium border border-slate-200 rounded p-1 text-slate-600 outline-none bg-white max-w-[120px] shadow-sm cursor-pointer">
+                                    <option value="">最近开仓记录 ▼</option>
+                                </select>
                             </div>
-                            <div class="grid grid-cols-2 gap-2">
-                                <button onclick="setTradeType('B1')" id="type-B1" class="type-btn active py-2 px-3 rounded-lg border border-slate-200 font-medium flex items-center justify-center gap-2">
-                                    <span class="font-bold">B1</span>
-                                    <span class="text-xs opacity-80">类B1</span>
+                            <div class="grid grid-cols-4 md:grid-cols-3 gap-2 h-10">
+                                <button onclick="setTradeType('B1')" id="type-B1" class="type-btn active h-full rounded-lg border border-slate-200 font-medium flex items-center justify-center gap-1">
+                                    <span class="font-bold text-sm">B1</span>
+                                    <span class="text-[10px] opacity-80">类B1</span>
                                 </button>
-                                <button onclick="setTradeType('B2')" id="type-B2" class="type-btn py-2 px-3 rounded-lg border border-slate-200 font-medium flex items-center justify-center gap-2">
-                                    <span class="font-bold">B2</span>
-                                    <span class="text-xs opacity-80">突破</span>
+                                <button onclick="setTradeType('B2')" id="type-B2" class="type-btn h-full rounded-lg border border-slate-200 font-medium flex items-center justify-center gap-1">
+                                    <span class="font-bold text-sm">B2</span>
+                                    <span class="text-[10px] opacity-80">突破</span>
                                 </button>
+                                <div class="col-span-2 md:col-span-1 relative h-full input-group">
+                                    <span class="absolute left-2.5 top-1/2 -translate-y-1/2 text-red-500 font-bold text-sm z-10">¥</span>
+                                    <input type="number" id="entryPrice" placeholder="开仓价格" step="0.01"
+                                        class="w-full h-full pl-6 pr-1 py-1 rounded-lg entry-input outline-none transition-all text-sm font-medium"
+                                        oninput="calculatePosition()" onchange="checkAndSaveHistory()">
+                                </div>
                             </div>
                             <input type="hidden" id="tradeType" value="B1">
                         </div>
 
                         <div class="compact-section mt-3">
-                            <label class="block compact-label font-semibold text-slate-600 mb-1.5">止损计算方式</label>
-                            <div class="flex gap-2 p-1 bg-slate-100 rounded-lg">
-                                <button onclick="setStopMode('price')" id="mode-price" class="mode-btn active flex-1 py-1.5 px-3 rounded-md text-sm font-medium transition-all">固定价格</button>
-                                <button onclick="setStopMode('percent')" id="mode-percent" class="mode-btn flex-1 py-1.5 px-3 rounded-md text-sm font-medium transition-all">固定幅度</button>
-                            </div>
-                        </div>
-
-                        <div class="grid grid-cols-2 gap-3 mb-1 mt-3">
-                            <div class="input-group">
-                                <label class="block compact-label font-semibold text-slate-600 mb-1">开仓价格 (元)</label>
-                                <div class="relative">
-                                    <span class="absolute left-2.5 top-1/2 -translate-y-1/2 text-red-500 font-bold text-sm">¥</span>
-                                    <input type="number" id="entryPrice" placeholder="0.00" step="0.01"
-                                        class="w-full pl-6 pr-2 py-2 rounded-lg entry-input outline-none transition-all text-base font-medium"
-                                        oninput="calculatePosition()">
+                            <div class="flex items-center justify-between mb-1.5">
+                                <label class="block compact-label font-semibold text-slate-600 mb-0">止损</label>
+                                <div class="text-right text-[10px] text-slate-500">
+                                    <span id="priceModeInfo">对应幅度: <span class="font-medium text-green-600">--%</span></span>
+                                    <span id="percentModeInfo" class="hidden">对应价格: <span class="font-medium text-green-600">¥--</span></span>
                                 </div>
                             </div>
-
-                            <div id="stopPriceInput" class="input-group">
-                                <label class="block compact-label font-semibold text-slate-600 mb-1">止损价格 (元)</label>
-                                <div class="relative">
-                                    <span class="absolute left-2.5 top-1/2 -translate-y-1/2 text-green-500 font-bold text-sm">¥</span>
-                                    <input type="number" id="stopPrice" placeholder="0.00" step="0.01"
-                                        class="w-full pl-6 pr-2 py-2 rounded-lg stop-input outline-none transition-all text-base font-medium"
-                                        oninput="calculateFromStopPrice()">
-                                </div>
-                            </div>
-
-                            <div id="stopPercentInput" class="input-group hidden">
-                                <label class="block compact-label font-semibold text-slate-600 mb-1">止损百分比 (%)</label>
-                                <div class="relative">
-                                    <span class="absolute left-2.5 top-1/2 -translate-y-1/2 text-green-500 font-bold text-sm">-</span>
-                                    <input type="number" id="stopPercent" placeholder="5" step="0.1" min="0.1" max="50"
-                                        class="w-full pl-6 pr-6 py-2 rounded-lg stop-input outline-none transition-all text-base font-medium"
-                                        oninput="calculateFromStopPercent()">
-                                    <span class="absolute right-2 top-1/2 -translate-y-1/2 text-green-400 text-xs">%</span>
+                            <div class="grid grid-cols-4 md:grid-cols-3 gap-2 h-10">
+                                <button onclick="setStopMode('price')" id="mode-price" class="mode-btn active h-full rounded-md text-xs font-medium transition-all">固定价格</button>
+                                <button onclick="setStopMode('percent')" id="mode-percent" class="mode-btn h-full rounded-md text-xs font-medium transition-all">固定幅度</button>
+                                
+                                <div class="col-span-2 md:col-span-1 relative h-full input-group">
+                                    <div id="stopPriceWrapper" class="relative h-full w-full">
+                                        <span class="absolute left-2.5 top-1/2 -translate-y-1/2 text-green-500 font-bold text-sm z-10">¥</span>
+                                        <input type="number" id="stopPrice" placeholder="止损价格" step="0.01"
+                                            class="w-full h-full pl-6 pr-1 py-1 rounded-lg stop-input outline-none transition-all text-sm font-medium"
+                                            oninput="calculateFromStopPrice()" onchange="checkAndSaveHistory()">
+                                    </div>
+                                    <div id="stopPercentWrapper" class="relative h-full w-full hidden">
+                                        <span class="absolute left-2 top-1/2 -translate-y-1/2 text-green-500 font-bold text-sm z-10">-</span>
+                                        <input type="number" id="stopPercent" placeholder="5" step="0.1" min="0.1" max="50"
+                                            class="w-full h-full pl-5 pr-5 py-1 rounded-lg stop-input outline-none transition-all text-sm font-medium"
+                                            oninput="calculateFromStopPercent()" onchange="checkAndSaveHistory()">
+                                        <span class="absolute right-2 top-1/2 -translate-y-1/2 text-green-400 text-[10px] z-10">%</span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="text-right text-xs text-slate-500 mb-2">
-                            <span id="priceModeInfo">对应止损幅度: <span class="font-medium text-green-600">--%</span></span>
-                            <span id="percentModeInfo" class="hidden">对应止损价格: <span class="font-medium text-green-600">¥--</span></span>
-                        </div>
                     </div>
                     
                     <div class="mt-4 border-t border-slate-100 pt-4">
@@ -750,7 +746,7 @@
                     <div class="glass-panel rounded-xl p-5 shadow-2xl">
                         <h2 class="text-lg font-bold mb-4 text-slate-800 flex items-center gap-2">
                             <svg class="w-5 h-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012-2h2a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
                             </svg>
                             回撤保护计算结果
                         </h2>
@@ -876,6 +872,10 @@
         let currentProtectRR = 10;
         let currentMode = 'courage';
 
+        // 历史记录变量 (Local Storage)
+        const HISTORY_KEY = 'zxchart_trade_history';
+        let tradeHistory = JSON.parse(localStorage.getItem(HISTORY_KEY)) || [];
+
         const MODE_LEVEL_NAMES = {
             courage: ['保守', '稳健', '积极', '重仓', '激进'],
             sensitive: ['敏感', '保守', '稳健', '适中', '积极']
@@ -892,6 +892,64 @@
 
         function getRRRatio(type) {
             return MODE_RR[currentMode][type];
+        }
+
+        // 初始化加载历史记录下拉框
+        function updateHistoryUI() {
+            const select = document.getElementById('tradeHistorySelect');
+            if (!select) return;
+            select.innerHTML = '<option value="">最近开仓记录 ▼</option>';
+            tradeHistory.forEach((item, index) => {
+                const opt = document.createElement('option');
+                opt.value = index;
+                opt.textContent = `开:${item.entry} 损:${item.stop}`;
+                select.appendChild(opt);
+            });
+        }
+
+        // 保存历史记录（限制10条）
+        function saveTradeToHistory(entry, stop) {
+            if (!entry || !stop) return;
+            const exists = tradeHistory.some(i => parseFloat(i.entry) === parseFloat(entry) && parseFloat(i.stop) === parseFloat(stop));
+            if (!exists) {
+                tradeHistory.unshift({ entry: entry, stop: stop });
+                if (tradeHistory.length > 10) tradeHistory.pop();
+                localStorage.setItem(HISTORY_KEY, JSON.stringify(tradeHistory));
+                updateHistoryUI();
+            }
+        }
+
+        // 当输入框失焦时判断并保存记录，防止半成品输入存入历史
+        function checkAndSaveHistory() {
+            const entry = parseFloat(document.getElementById('entryPrice').value);
+            let stop;
+            if (currentStopMode === 'price') {
+                stop = parseFloat(document.getElementById('stopPrice').value);
+            } else {
+                const percent = parseFloat(document.getElementById('stopPercent').value);
+                if (entry && percent) {
+                    stop = entry * (1 - percent / 100);
+                }
+            }
+            if (entry > 0 && stop > 0 && stop < entry) {
+                saveTradeToHistory(entry.toFixed(2), stop.toFixed(2));
+            }
+        }
+
+        // 下拉框选中时加载数据
+        function loadTradeHistory() {
+            const select = document.getElementById('tradeHistorySelect');
+            const index = select.value;
+            if (index === "") return;
+            
+            const item = tradeHistory[index];
+            if (item) {
+                document.getElementById('entryPrice').value = item.entry;
+                setStopMode('price'); // 自动切换到价格模式
+                document.getElementById('stopPrice').value = item.stop;
+                calculatePosition();
+            }
+            select.value = ""; // 执行后复位
         }
 
         // JS 动态生成刻度并精准对齐
@@ -918,7 +976,6 @@
             let html = '';
             ticks.forEach(val => {
                 const percent = ((val - min) / (max - min)) * 100;
-                // 现已通过父容器的 mx-[9px] 完美匹配原生滑块圆心运动轨迹，此处直接用百分比居中即可
                 html += `<span class="absolute -translate-x-1/2" style="left: ${percent}%;">${val}</span>`;
             });
             container.innerHTML = html;
@@ -1009,14 +1066,12 @@
             const hint = document.getElementById('typeRRHint');
             hint.textContent = `对应理想盈亏比${ratio}:1`;
             
-            // 联动：自动设定回撤保护页的预期盈亏比
             if (type === 'B1') {
                 setProtectRR(10);
             } else if (type === 'B2') {
                 setProtectRR(5);
             }
 
-            // 更新凯利建议显示
             updateKellySuggestion();
             calculatePosition();
         }
@@ -1024,21 +1079,21 @@
         function setStopMode(mode) {
             currentStopMode = mode;
             document.getElementById('mode-price').className = mode === 'price' 
-                ? 'mode-btn active flex-1 py-1.5 px-3 rounded-md text-sm font-medium transition-all'
-                : 'mode-btn flex-1 py-1.5 px-3 rounded-md text-sm font-medium transition-all';
+                ? 'mode-btn active h-full rounded-md text-xs font-medium transition-all'
+                : 'mode-btn h-full rounded-md text-xs font-medium transition-all';
             document.getElementById('mode-percent').className = mode === 'percent'
-                ? 'mode-btn active flex-1 py-1.5 px-3 rounded-md text-sm font-medium transition-all'
-                : 'mode-btn flex-1 py-1.5 px-3 rounded-md text-sm font-medium transition-all';
+                ? 'mode-btn active h-full rounded-md text-xs font-medium transition-all'
+                : 'mode-btn h-full rounded-md text-xs font-medium transition-all';
 
             if (mode === 'price') {
-                document.getElementById('stopPriceInput').classList.remove('hidden');
-                document.getElementById('stopPercentInput').classList.add('hidden');
+                document.getElementById('stopPriceWrapper').classList.remove('hidden');
+                document.getElementById('stopPercentWrapper').classList.add('hidden');
                 document.getElementById('priceModeInfo').classList.remove('hidden');
                 document.getElementById('percentModeInfo').classList.add('hidden');
                 calculateFromStopPrice();
             } else {
-                document.getElementById('stopPriceInput').classList.add('hidden');
-                document.getElementById('stopPercentInput').classList.remove('hidden');
+                document.getElementById('stopPriceWrapper').classList.add('hidden');
+                document.getElementById('stopPercentWrapper').classList.remove('hidden');
                 document.getElementById('priceModeInfo').classList.add('hidden');
                 document.getElementById('percentModeInfo').classList.remove('hidden');
                 calculateFromStopPercent();
@@ -1050,10 +1105,10 @@
             const stop = parseFloat(document.getElementById('stopPrice').value);
             if (entry && stop && entry > 0) {
                 const percent = ((entry - stop) / entry * 100).toFixed(2);
-                document.getElementById('priceModeInfo').innerHTML = `对应止损幅度: <span class="font-medium text-green-600">${percent}%</span>`;
+                document.getElementById('priceModeInfo').innerHTML = `对应幅度: <span class="font-medium text-green-600">${percent}%</span>`;
                 calculatePosition();
             } else {
-                document.getElementById('priceModeInfo').innerHTML = `对应止损幅度: <span class="font-medium text-green-600">--%</span>`;
+                document.getElementById('priceModeInfo').innerHTML = `对应幅度: <span class="font-medium text-green-600">--%</span>`;
             }
         }
 
@@ -1062,10 +1117,10 @@
             const percent = parseFloat(document.getElementById('stopPercent').value);
             if (entry && percent && entry > 0) {
                 const stopPrice = (entry * (1 - percent / 100)).toFixed(2);
-                document.getElementById('percentModeInfo').innerHTML = `对应止损价格: <span class="font-medium text-green-600">¥${stopPrice}</span>`;
+                document.getElementById('percentModeInfo').innerHTML = `对应价格: <span class="font-medium text-green-600">¥${stopPrice}</span>`;
                 calculatePosition();
             } else {
-                document.getElementById('percentModeInfo').innerHTML = `对应止损价格: <span class="font-medium text-green-600">¥--</span>`;
+                document.getElementById('percentModeInfo').innerHTML = `对应价格: <span class="font-medium text-green-600">¥--</span>`;
             }
         }
 
@@ -1097,10 +1152,8 @@
                 }
             }
 
-            // 联动：自动填充回撤保护参数的开仓价和止损价
             if (entry) { document.getElementById('protectEntryPrice').value = entry; }
             if (stop) { document.getElementById('protectStopPrice').value = stop.toFixed(2); }
-            // 触发保护页的重新计算
             calculateProtection();
 
             if (!balance || !entry || !stop || entry <= 0 || stop <= 0) {
@@ -1152,9 +1205,9 @@
             document.getElementById('targetUpPercent').textContent = targetUpPercent;
 
             if (currentStopMode === 'price') {
-                document.getElementById('priceModeInfo').innerHTML = `对应止损幅度: <span class="font-medium text-green-600">${stopLossPercent}%</span>`;
+                document.getElementById('priceModeInfo').innerHTML = `对应幅度: <span class="font-medium text-green-600">${stopLossPercent}%</span>`;
             } else {
-                document.getElementById('percentModeInfo').innerHTML = `对应止损价格: <span class="font-medium text-green-600">¥${stop.toFixed(2)}</span>`;
+                document.getElementById('percentModeInfo').innerHTML = `对应价格: <span class="font-medium text-green-600">¥${stop.toFixed(2)}</span>`;
             }
 
             const sharesHint = document.getElementById('sharesAdjustHint');
@@ -1232,7 +1285,6 @@
             document.getElementById('pitWarningText').textContent = msg;
         }
 
-        // 利润回撤保护设置盈亏比（按钮模式）
         function setProtectRR(rr) { 
             currentProtectRR = rr; 
             document.getElementById('protectRR').value = rr; 
@@ -1240,7 +1292,6 @@
             const activeBtn = document.getElementById(`protect-rr-${rr}`);
             if(activeBtn) activeBtn.classList.add('active'); 
             
-            // 同步更新滑块视觉状态
             const slider = document.getElementById('customRRSlider');
             if (slider) {
                 slider.value = rr;
@@ -1251,11 +1302,9 @@
             calculateProtection(); 
         }
 
-        // 利润回撤保护通过滑块设置盈亏比
         function updateProtectRRFromSlider() {
             const val = parseFloat(document.getElementById('customRRSlider').value);
             document.getElementById('customRRValue').textContent = formatRR(val);
-            // 滑动滑块时取消上方固定按钮的选中状态
             document.querySelectorAll('.rr-btn').forEach(btn => btn.classList.remove('active'));
             currentProtectRR = val;
             document.getElementById('protectRR').value = val;
@@ -1333,8 +1382,8 @@
             setTradeType('B1');
             setStopMode('price');
             updateKellySuggestion();
+            updateHistoryUI(); // 渲染下拉菜单
             
-            // 监听跨页面的 LocalStorage 变动，实现双屏实时热更新
             window.addEventListener('storage', (event) => {
                 if (event.key === 'zxchart_kelly_B1' || event.key === 'zxchart_kelly_B2') {
                     updateKellySuggestion();
