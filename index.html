@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>仓位计算器 | 风险/盈亏比仓位管理工具</title>
+    
+    <link rel="manifest" href="./manifest.json">
+    <meta name="theme-color" content="#0f172a">
+    <link rel="apple-touch-icon" href="./icons/icon-192x192.png">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
     <style>
@@ -894,7 +898,6 @@
             return MODE_RR[currentMode][type];
         }
 
-        // 初始化加载历史记录下拉框
         function updateHistoryUI() {
             const select = document.getElementById('tradeHistorySelect');
             if (!select) return;
@@ -907,7 +910,6 @@
             });
         }
 
-        // 保存历史记录（限制10条）
         function saveTradeToHistory(entry, stop) {
             if (!entry || !stop) return;
             const exists = tradeHistory.some(i => parseFloat(i.entry) === parseFloat(entry) && parseFloat(i.stop) === parseFloat(stop));
@@ -919,7 +921,6 @@
             }
         }
 
-        // 当输入框失焦时判断并保存记录，防止半成品输入存入历史
         function checkAndSaveHistory() {
             const entry = parseFloat(document.getElementById('entryPrice').value);
             let stop;
@@ -936,7 +937,6 @@
             }
         }
 
-        // 下拉框选中时加载数据
         function loadTradeHistory() {
             const select = document.getElementById('tradeHistorySelect');
             const index = select.value;
@@ -945,14 +945,13 @@
             const item = tradeHistory[index];
             if (item) {
                 document.getElementById('entryPrice').value = item.entry;
-                setStopMode('price'); // 自动切换到价格模式
+                setStopMode('price'); 
                 document.getElementById('stopPrice').value = item.stop;
                 calculatePosition();
             }
-            select.value = ""; // 执行后复位
+            select.value = ""; 
         }
 
-        // JS 动态生成刻度并精准对齐
         function updateSliderTicks(mode) {
             const slider = document.getElementById('riskSlider');
             const container = document.getElementById('sliderTicks');
@@ -1013,7 +1012,6 @@
             calculatePosition();
         }
 
-        // 读取 LocalStorage 中的凯利建议数据
         function updateKellySuggestion() {
             const type = currentTradeType; 
             const rawData = localStorage.getItem('zxchart_kelly_' + type);
@@ -1382,7 +1380,7 @@
             setTradeType('B1');
             setStopMode('price');
             updateKellySuggestion();
-            updateHistoryUI(); // 渲染下拉菜单
+            updateHistoryUI(); 
             
             window.addEventListener('storage', (event) => {
                 if (event.key === 'zxchart_kelly_B1' || event.key === 'zxchart_kelly_B2') {
@@ -1390,6 +1388,19 @@
                 }
             });
         });
+
+        // 注册 PWA Service Worker
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js')
+                    .then(registration => {
+                        console.log('SW 注册成功，作用域为: ', registration.scope);
+                    })
+                    .catch(err => {
+                        console.log('SW 注册失败: ', err);
+                    });
+            });
+        }
     </script>
 </body>
 </html>
