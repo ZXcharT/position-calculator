@@ -312,9 +312,9 @@
             --oc-warm: #b99565;
             --oc-on-solid: #0f1216;
         }
+        :root { --oc-layout-max: 1200px; --oc-layout-gutter: 24px; }
         html, body {
             min-width: 0;
-            overflow-x: hidden;
             background: var(--oc-ground) !important;
             color: var(--oc-text) !important;
         }
@@ -324,18 +324,18 @@
         }
         ::selection { background: var(--oc-accent-fill); color: var(--oc-ink); }
         * { scrollbar-color: var(--oc-line-strong) transparent; }
-        .oc-shell { max-width: 1180px; margin: 0 auto; padding: 0 24px 28px; }
+        .oc-shell { width: min(var(--oc-layout-max), calc(100% - 2 * var(--oc-layout-gutter))) !important; max-width: none !important; margin: 0 auto; padding: 0 0 28px; }
         .site-nav {
             position: relative;
             height: 58px;
             margin: 0 0 18px;
-            padding: 0 max(24px, calc((100vw - 1180px) / 2 + 24px));
-            display: flex;
-            align-items: center;
+            padding: 0;
+            display: block;
             border-bottom: 1px solid var(--oc-line-strong);
             background: var(--oc-paper);
             white-space: nowrap;
         }
+        .oc-nav-inner { width: min(var(--oc-layout-max), calc(100% - 2 * var(--oc-layout-gutter))); height: 100%; margin-inline: auto; display: flex; align-items: center; }
         .site-wordmark { color: var(--oc-ink); font-size: 16px; font-weight: 730; letter-spacing: -.035em; text-decoration: none; }
         .site-wordmark::after { content: ""; display: inline-block; width: 1px; height: 18px; margin-left: 22px; vertical-align: middle; background: var(--oc-line-strong); }
         .site-nav-links { min-width: 0; align-self: stretch; height: 100%; margin-left: 22px; display: flex; gap: 26px; align-items: center; overflow: visible; scrollbar-width: none; }
@@ -494,16 +494,19 @@
         select:focus-visible { outline: 2px solid var(--oc-ink); outline-offset: 2px; }
         .disclaimer { display: block !important; padding: 10px 0 !important; border-width: 1px 0 0 !important; background: transparent !important; color: var(--oc-muted) !important; }
         @media (max-width: 1179px) {
+            :root { --oc-layout-gutter: 16px; }
             .page-container > .grid { grid-template-columns: 1fr !important; }
         }
         @media (max-width: 640px) {
-            .oc-shell { padding: 0 12px 20px; }
-            .site-nav { height: auto; min-height: 92px; margin: 0 0 14px; padding: 10px 12px 0; align-items: flex-start; flex-direction: column; }
+            :root { --oc-layout-gutter: 14px; }
+            .oc-shell { padding-bottom: 20px; }
+            .site-nav { height: auto; min-height: 92px; margin: 0 0 14px; padding: 0; }
+            .oc-nav-inner { min-height: 92px; padding-top: 10px; align-items: flex-start; flex-direction: column; position: relative; }
             .site-wordmark::after { display: none; }
             .site-nav-links { width: 100%; height: 36px; margin-left: 0; gap: 18px; overflow-x: auto; overflow-y: hidden; overscroll-behavior-x: contain; }
             .site-link { flex: 0 0 auto; }
             .site-link.active::after { bottom: 0; }
-            .theme-toggle { position: absolute; top: 10px; right: 12px; }
+            .theme-toggle { position: absolute; top: 10px; right: 0; }
             .page-head h1 { font-size: 24px !important; }
             .workflow-tabs { overflow-x: auto; }
             .workflow-tabs-bar { min-width: max-content; }
@@ -513,9 +516,9 @@
 </head>
 <body class="text-slate-800">
 <!-- THESIS: A risk calculation workspace arranged as a quiet OneChart operating surface, refusing the prior colorful card stack. OWN-WORLD: OneChart ground, paper, ink, rules, and data-only semantic color. STORY: Traders select a workflow, enter known prices, and read executable risk boundaries. FIRST VIEWPORT: Unified navigation, plain title, workflow switcher, then input and result columns. FORM: Flat worksheet surface, seed 83f98f1d. FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, and DESIGN.md -->
-<nav class="site-nav" aria-label="OneChart 导航"><a class="site-wordmark" href="https://onechart.top/">OneChart</a><div class="site-nav-links"><a class="site-link" href="https://onechart.top/">板块资金雷达</a><a class="site-link" href="https://onechart.top/macro/">宏观择时</a><a class="site-link active" aria-current="page" href="./index.html">仓位计算器</a><a class="site-link" href="https://simu.onechart.top/">交易模拟器</a></div><button class="theme-toggle" type="button" onclick="window.toggleOneChartTheme()" aria-label="切换到深色模式" aria-pressed="false"><svg class="theme-icon theme-icon-dark" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M21 12.8A8.5 8.5 0 1111.2 3 7 7 0 0021 12.8z"></path></svg><svg class="theme-icon theme-icon-light" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3.5" stroke-width="1.8"></circle><path stroke-linecap="round" stroke-width="1.8" d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.65 17.65l1.42 1.42M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.65 6.35l1.42-1.42"></path></svg><span class="theme-label">深色</span></button></nav>
-    <div class="max-w-6xl mx-auto oc-shell">
-        <div class="page-head text-center mb-4 text-white">
+<nav class="site-nav" data-layout="navOuter" aria-label="OneChart 导航"><div class="oc-nav-inner" data-layout="navInner"><a class="site-wordmark" href="https://onechart.top/">OneChart</a><div class="site-nav-links"><a class="site-link" href="https://onechart.top/">板块资金雷达</a><a class="site-link" href="https://onechart.top/macro/">宏观择时</a><a class="site-link active" aria-current="page" href="./index.html">仓位计算器</a><a class="site-link" href="https://simu.onechart.top/">交易模拟器</a></div><button class="theme-toggle" type="button" onclick="window.toggleOneChartTheme()" aria-label="切换到深色模式" aria-pressed="false"><svg class="theme-icon theme-icon-dark" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M21 12.8A8.5 8.5 0 1111.2 3 7 7 0 0021 12.8z"></path></svg><svg class="theme-icon theme-icon-light" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3.5" stroke-width="1.8"></circle><path stroke-linecap="round" stroke-width="1.8" d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.65 17.65l1.42 1.42M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.65 6.35l1.42-1.42"></path></svg><span class="theme-label">深色</span></button></div></nav>
+    <div class="max-w-6xl mx-auto oc-shell" data-layout="contentShell">
+        <div class="page-head text-center mb-4 text-white" data-layout="pageHeaderInner">
             <h1 class="text-3xl md:text-4xl font-bold mb-1 tracking-tight">仓位计算器</h1>
             <p class="text-slate-300 text-sm">以损定仓 明确预期 控制回撤</p>
         </div>
