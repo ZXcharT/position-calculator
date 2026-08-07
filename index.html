@@ -1243,23 +1243,92 @@
             calculatePosition();
         }
 
+        const KELLY_SYNC_VERSION = 1;
+        const KELLY_SYNC_MAX_AGE_MS = 60 * 60 * 24 * 30 * 1000;
+
+        function getKellyCookieName(type) {
+            return `onechart_kelly_${type}_v${KELLY_SYNC_VERSION}`;
+        }
+
+        function normalizeKellyPayload(raw, type, requireVersion = false) {
+            try {
+                const data = typeof raw === 'string' ? JSON.parse(raw) : raw;
+                if (!data || (requireVersion && data.v !== KELLY_SYNC_VERSION)) return null;
+                if (data.v !== undefined && data.v !== KELLY_SYNC_VERSION) return null;
+                if (data.type !== undefined && data.type !== type) return null;
+                const full = Number(data.full);
+                const half = Number(data.half);
+                const timestamp = Number(data.timestamp);
+                if (!Number.isFinite(full) || !Number.isFinite(half) || !Number.isFinite(timestamp)) return null;
+                if (full < 0 || full > 100 || half < 0 || half > full) return null;
+                const now = Date.now();
+                if (timestamp < now - KELLY_SYNC_MAX_AGE_MS || timestamp > now + 5 * 60 * 1000) return null;
+                return { v: KELLY_SYNC_VERSION, type, full, half, timestamp };
+            } catch (error) {
+                return null;
+            }
+        }
+
+        function safeReadKellyLocal(storageKey) {
+            try {
+                return localStorage.getItem(storageKey);
+            } catch (error) {
+                return null;
+            }
+        }
+
+        function safeWriteKellyLocal(storageKey, data) {
+            try {
+                localStorage.setItem(storageKey, JSON.stringify(data));
+                return true;
+            } catch (error) {
+                return false;
+            }
+        }
+
+        function safeRemoveKellyLocal(storageKey) {
+            try {
+                localStorage.removeItem(storageKey);
+            } catch (error) {}
+        }
+
+        function readKellyCookie(type) {
+            try {
+                const prefix = `${getKellyCookieName(type)}=`;
+                const entry = document.cookie.split(';').map(item => item.trim()).find(item => item.startsWith(prefix));
+                if (!entry) return null;
+                return normalizeKellyPayload(decodeURIComponent(entry.slice(prefix.length)), type, true);
+            } catch (error) {
+                return null;
+            }
+        }
+
+        function getLatestKellySuggestion(type) {
+            const storageKey = 'zxchart_kelly_' + type;
+            const rawLocal = safeReadKellyLocal(storageKey);
+            const localData = normalizeKellyPayload(rawLocal, type);
+            if (rawLocal && !localData) safeRemoveKellyLocal(storageKey);
+            const cookieData = readKellyCookie(type);
+            const latest = !localData ? cookieData : !cookieData ? localData
+                : cookieData.timestamp > localData.timestamp ? cookieData : localData;
+
+            if (latest && cookieData && (!localData || cookieData.timestamp > localData.timestamp)) {
+                safeWriteKellyLocal(storageKey, latest);
+            }
+            return latest;
+        }
+
         function updateKellySuggestion() {
-            const type = currentTradeType; 
-            const rawData = localStorage.getItem('zxchart_kelly_' + type);
+            const type = currentTradeType;
+            const data = getLatestKellySuggestion(type);
             const suggestionBox = document.getElementById('kellySuggestionBox');
             const rangeText = document.getElementById('kellyRange');
             const goToSim = document.getElementById('kellyGoToSim');
 
-            if (rawData) {
-                try {
-                    const data = JSON.parse(rawData);
-                    rangeText.textContent = `${data.half.toFixed(2)}% - ${data.full.toFixed(2)}%`;
-                    suggestionBox.classList.remove('hidden');
-                    goToSim.classList.add('hidden');
-                } catch(e) {
-                    suggestionBox.classList.add('hidden');
-                    goToSim.classList.remove('hidden');
-                }
+            if (data) {
+                rangeText.textContent = `${data.half.toFixed(2)}% - ${data.full.toFixed(2)}%`;
+                suggestionBox.classList.remove('hidden');
+                goToSim.classList.add('hidden');
             } else {
                 suggestionBox.classList.add('hidden');
                 goToSim.classList.remove('hidden');
@@ -1617,6 +1686,10 @@
                 if (event.key === 'zxchart_kelly_B1' || event.key === 'zxchart_kelly_B2') {
                     updateKellySuggestion();
                 }
+            });
+            window.addEventListener('focus', updateKellySuggestion);
+            document.addEventListener('visibilitychange', () => {
+                if (document.visibilityState === 'visible') updateKellySuggestion();
             });
         });
 
