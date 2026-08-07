@@ -1,5 +1,5 @@
 {
-  "name": "仓位计算器 | 知行图表交易",
+  "name": "仓位计算器 | OneChart",
   "short_name": "仓位计算",
   "description": "风险与盈亏比仓位管理工具，支持A股及加密货币开仓、出坑、回撤保护计算。",
   "start_url": "./index.html",
