@@ -1,4 +1,4 @@
-const CACHE_NAME = 'position-calc-v3';
+const CACHE_NAME = 'position-calc-v4';
 const APP_SHELL_URLS = [
     './',
     './index.html',

@@ -110,7 +110,7 @@ components:
 - **Inputs:** 中性背景和边框；focus 转为 accent 边框与清楚的 outline。
 - **Segmented controls:** 方角中性按钮；当前选择只改变边框和文字，不铺大面积彩色背景。
 - **Status:** 警示、成功和风险可使用轻量语义底色；结果内部的结构分割线统一使用中性 line，仅文字与关键数值保留语义色。
-- **Theme control:** 使用 `onechart-theme`，`html[data-theme]`，缺失或非法值回退 light。
+- **Theme control:** 固定使用“月亮/太阳 SVG + 深色/浅色标签”；浅色显示月亮与“深色”，深色显示太阳与“浅色”。状态使用 `onechart-theme` 和 `html[data-theme]`，缺失或非法值回退 light。
 
 ## Do's and Don'ts
 

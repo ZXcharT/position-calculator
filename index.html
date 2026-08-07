@@ -344,8 +344,12 @@
         .site-link:hover { color: var(--oc-ink); }
         .site-link.active { color: var(--oc-ink); font-weight: 650; }
         .site-link.active::after { content: ""; position: absolute; right: 0; bottom: -1px; left: 0; height: 2px; background: var(--oc-ink); }
-        .theme-toggle { height: 30px; margin-left: auto; padding: 0 9px; border: 1px solid var(--oc-line-strong); border-radius: 0; background: transparent; color: var(--oc-muted); font-size: 10px; font-weight: 620; }
+        .theme-toggle { height: 30px; margin-left: auto; padding: 0 9px; display: inline-flex; align-items: center; gap: 6px; border: 1px solid var(--oc-line-strong); border-radius: 0; background: transparent; color: var(--oc-muted); font-size: 10px; font-weight: 620; white-space: nowrap; }
         .theme-toggle:hover { border-color: var(--oc-ink); color: var(--oc-ink); }
+        .theme-icon { width: 13px; height: 13px; flex: none; }
+        .theme-icon-light { display: none; }
+        html[data-theme="dark"] .theme-icon-dark { display: none; }
+        html[data-theme="dark"] .theme-icon-light { display: block; }
         .page-head { margin: 0 0 16px !important; padding: 2px 0 15px; display: flex; align-items: baseline; gap: 12px; border-bottom: 1px solid var(--oc-line-strong); text-align: left !important; }
         .page-head h1 { margin: 0 !important; color: var(--oc-ink) !important; font-size: 28px !important; font-weight: 710 !important; line-height: 1.15; letter-spacing: -.04em; }
         .page-head p { margin: 0 !important; color: var(--oc-muted) !important; font-size: 11px !important; white-space: nowrap; }
@@ -509,7 +513,7 @@
 </head>
 <body class="text-slate-800">
 <!-- THESIS: A risk calculation workspace arranged as a quiet OneChart operating surface, refusing the prior colorful card stack. OWN-WORLD: OneChart ground, paper, ink, rules, and data-only semantic color. STORY: Traders select a workflow, enter known prices, and read executable risk boundaries. FIRST VIEWPORT: Unified navigation, plain title, workflow switcher, then input and result columns. FORM: Flat worksheet surface, seed 83f98f1d. FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, and DESIGN.md -->
-<nav class="site-nav" aria-label="OneChart 导航"><a class="site-wordmark" href="https://onechart.top/">OneChart</a><div class="site-nav-links"><a class="site-link" href="https://onechart.top/">板块资金雷达</a><a class="site-link" href="https://onechart.top/macro/">宏观择时</a><a class="site-link active" aria-current="page" href="./index.html">仓位计算器</a><a class="site-link" href="https://simu.onechart.top/">交易模拟器</a></div><button class="theme-toggle" type="button" onclick="window.toggleOneChartTheme()" aria-label="切换到深色模式" aria-pressed="false">深色</button></nav>
+<nav class="site-nav" aria-label="OneChart 导航"><a class="site-wordmark" href="https://onechart.top/">OneChart</a><div class="site-nav-links"><a class="site-link" href="https://onechart.top/">板块资金雷达</a><a class="site-link" href="https://onechart.top/macro/">宏观择时</a><a class="site-link active" aria-current="page" href="./index.html">仓位计算器</a><a class="site-link" href="https://simu.onechart.top/">交易模拟器</a></div><button class="theme-toggle" type="button" onclick="window.toggleOneChartTheme()" aria-label="切换到深色模式" aria-pressed="false"><svg class="theme-icon theme-icon-dark" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M21 12.8A8.5 8.5 0 1111.2 3 7 7 0 0021 12.8z"></path></svg><svg class="theme-icon theme-icon-light" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3.5" stroke-width="1.8"></circle><path stroke-linecap="round" stroke-width="1.8" d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.65 17.65l1.42 1.42M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.65 6.35l1.42-1.42"></path></svg><span class="theme-label">深色</span></button></nav>
     <div class="max-w-6xl mx-auto oc-shell">
         <div class="page-head text-center mb-4 text-white">
             <h1 class="text-3xl md:text-4xl font-bold mb-1 tracking-tight">仓位计算器</h1>
@@ -1089,7 +1093,7 @@
 
     </div>
 
-    <script>(function(){function syncThemeControl(){var dark=document.documentElement.dataset.theme==='dark';var button=document.querySelector('.theme-toggle');if(button){button.textContent=dark?'浅色':'深色';button.setAttribute('aria-label',dark?'切换到浅色模式':'切换到深色模式');button.setAttribute('aria-pressed',dark?'true':'false');}var meta=document.querySelector('meta[name="theme-color"]');if(meta)meta.setAttribute('content',dark?'#0f1216':'#f3f4f6');}window.toggleOneChartTheme=function(){var next=document.documentElement.dataset.theme==='dark'?'light':'dark';document.documentElement.dataset.theme=next;document.documentElement.style.colorScheme=next;try{localStorage.setItem('onechart-theme',next)}catch(e){}syncThemeControl();window.dispatchEvent(new CustomEvent('onechart-theme-change',{detail:{theme:next}}));};if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',syncThemeControl,{once:true});else syncThemeControl();})();</script>
+    <script>(function(){function syncThemeControl(){var dark=document.documentElement.dataset.theme==='dark';var button=document.querySelector('.theme-toggle');var label=button&&button.querySelector('.theme-label');if(button){if(label)label.textContent=dark?'浅色':'深色';button.setAttribute('aria-label',dark?'切换到浅色模式':'切换到深色模式');button.setAttribute('aria-pressed',dark?'true':'false');}var meta=document.querySelector('meta[name="theme-color"]');if(meta)meta.setAttribute('content',dark?'#0f1216':'#f3f4f6');}window.toggleOneChartTheme=function(){var next=document.documentElement.dataset.theme==='dark'?'light':'dark';document.documentElement.dataset.theme=next;document.documentElement.style.colorScheme=next;try{localStorage.setItem('onechart-theme',next)}catch(e){}syncThemeControl();window.dispatchEvent(new CustomEvent('onechart-theme-change',{detail:{theme:next}}));};if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',syncThemeControl,{once:true});else syncThemeControl();})();</script>
     <script>
         // 全局变量
         let currentStopMode = 'price';
