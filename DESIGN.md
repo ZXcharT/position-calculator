@@ -92,7 +92,7 @@ components:
 
 ## Layout
 
-导航采用 full-bleed outer，底部 1px 分界线贯穿视口；导航内容、页面标题与主体使用同一 centered inner。统一 token 为 `--oc-layout-max: 1200px`，容器为 `width: min(var(--oc-layout-max), calc(100% - 2 * var(--oc-layout-gutter)))`，自身不叠加横向 padding。gutter：桌面 24px、1179px 以下 16px、640px 以下 14px。统一导航之后依次为页面标题、流程切换、当前流程的输入/结果双栏。1179px 以下改为单栏；640px 以下导航分两行。流程切换和窄屏导航链接可横向滚动，但页面本身不得横向溢出。
+导航采用 full-bleed outer，底部 1px 分界线贯穿视口；导航内容、页面标题与主体使用同一 centered inner。统一 token 为 `--oc-layout-max: 1560px`，容器为 `width: min(var(--oc-layout-max), calc(100% - 2 * var(--oc-layout-gutter)))`，自身不叠加横向 padding。gutter：桌面 24px、1287px 以下 16px、640px 以下 14px。统一导航之后依次为页面标题、流程切换、当前流程的输入/结果双栏。1179px 以下改为单栏；640px 以下导航分两行。流程切换和窄屏导航链接可横向滚动，但页面本身不得横向溢出。
 
 ## Elevation & Depth
 

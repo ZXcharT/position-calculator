@@ -312,7 +312,7 @@
             --oc-warm: #b99565;
             --oc-on-solid: #0f1216;
         }
-        :root { --oc-layout-max: 1200px; --oc-layout-gutter: 24px; }
+        :root { --oc-layout-max: 1560px; --oc-layout-gutter: 24px; }
         html, body {
             min-width: 0;
             background: var(--oc-ground) !important;
@@ -493,8 +493,10 @@
         input:focus-visible,
         select:focus-visible { outline: 2px solid var(--oc-ink); outline-offset: 2px; }
         .disclaimer { display: block !important; padding: 10px 0 !important; border-width: 1px 0 0 !important; background: transparent !important; color: var(--oc-muted) !important; }
-        @media (max-width: 1179px) {
+        @media (max-width: 1287px) {
             :root { --oc-layout-gutter: 16px; }
+        }
+        @media (max-width: 1179px) {
             .page-container > .grid { grid-template-columns: 1fr !important; }
         }
         @media (max-width: 640px) {
