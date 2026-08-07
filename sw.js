@@ -1,20 +1,22 @@
-const CACHE_NAME = 'position-calc-v1';
-const urlsToCache = [
+const CACHE_NAME = 'position-calc-v2';
+const APP_SHELL_URLS = [
     './',
     './index.html',
-    './manifest.json',
-    // 缓存 Tailwind 和 字体，实现完全离线可用
+    './manifest.json'
+];
+const OPTIONAL_EXTERNAL_URLS = [
     'https://cdn.tailwindcss.com',
-    'https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;700&display=swap'
+    'https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600;700&display=swap'
 ];
 
-// 安装并缓存资源
+// 先保证本地 app shell 可离线安装；外部样式与字体缓存失败不阻断安装。
 self.addEventListener('install', event => {
     event.waitUntil(
         caches.open(CACHE_NAME)
-            .then(cache => {
-                return cache.addAll(urlsToCache);
-            })
+            .then(cache => cache.addAll(APP_SHELL_URLS)
+                .then(() => Promise.all(
+                    OPTIONAL_EXTERNAL_URLS.map(url => cache.add(url).catch(() => null))
+                )))
     );
 });
 

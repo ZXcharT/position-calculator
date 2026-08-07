@@ -4,21 +4,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>仓位计算器 | 风险/盈亏比仓位管理工具</title>
-    
+    <script>(function(){var theme='light';try{var saved=localStorage.getItem('onechart-theme');if(saved==='dark'||saved==='light')theme=saved;}catch(e){}document.documentElement.dataset.theme=theme;document.documentElement.style.colorScheme=theme;})();</script>
     <link rel="manifest" href="./manifest.json">
-    <meta name="theme-color" content="#0f172a">
+    <meta name="theme-color" content="#f3f4f6">
     <link rel="apple-touch-icon" href="./icons/icon-192x192.png">
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         body {
-            font-family: 'Inter', 'Noto Sans SC', sans-serif;
-            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans SC', sans-serif;
+            background: var(--oc-paper);
             min-height: 100vh;
         }
         .glass-panel {
             background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
+
             border: 1px solid rgba(255, 255, 255, 0.2);
         }
         .input-group {
@@ -31,9 +31,9 @@
             transition: all 0.2s ease;
         }
         .type-btn.active {
-            background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+            background: var(--oc-paper);
             color: white;
-            box-shadow: 0 4px 12px rgba(139, 92, 246, 0.4);
+
         }
         .mode-btn {
             background-color: #f1f5f9;
@@ -41,92 +41,89 @@
             color: #334155;
         }
         .mode-btn.active {
-            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+            background: var(--oc-paper);
             color: white;
             border-color: transparent;
-            box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
+
         }
         .tab-btn.active {
-            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            background: var(--oc-paper);
             color: white;
-            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.4);
+
             transform: translateY(-2px);
         }
         .personality-btn.active {
-            background: linear-gradient(135deg, #475569 0%, #334155 100%);
+            background: var(--oc-paper);
             color: white;
             border-color: #94a3b8;
             transform: translateY(-1px);
-            box-shadow: 0 2px 8px rgba(100, 116, 139, 0.4);
+
         }
-        
+
         .rr-btn.active {
-            background: linear-gradient(135deg, #4f46e5 0%, #4338ca 100%);
+            background: var(--oc-paper);
             color: white;
             border-color: transparent;
-            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.4);
+
         }
 
         .result-card {
-            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
-            border-left: 4px solid #3b82f6;
+            background: var(--oc-paper);
         }
         .target-card-red {
-            background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
-            border-left: 4px solid #ef4444;
+            background: var(--oc-paper);
         }
         .breakeven-card {
-            background: linear-gradient(135deg, #fff7ed 0%, #fed7aa 100%);
-            border-left: 4px solid #f97316;
+            background: var(--oc-paper);
         }
         .highlight-number {
-            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+            background: var(--oc-paper);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             font-weight: 700;
         }
         .target-number-red {
-            background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+            background: var(--oc-paper);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             font-weight: 700;
         }
         .rr-badge {
-            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            background: var(--oc-paper);
             color: white;
             font-weight: bold;
         }
         .entry-input {
-            background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
+            background: var(--oc-paper);
             border: 2px solid #fecaca;
         }
         .entry-input:focus {
             border-color: #ef4444;
-            box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+
         }
         .stop-input {
-            background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+            background: var(--oc-paper);
             border: 2px solid #bbf7d0;
         }
         .stop-input:focus {
             border-color: #22c55e;
-            box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.1);
+
         }
         .pit-top-input {
-            background: linear-gradient(135deg, #fef9c3 0%, #fde047 100%);
+            background: var(--oc-paper);
             border: 2px solid #facc15;
         }
         .pit-top-input:focus {
             border-color: #eab308;
-            box-shadow: 0 0 0 3px rgba(234, 179, 8, 0.1);
+
         }
         .pit-bottom-input {
-            background: linear-gradient(135deg, #dcfce7 0%, #86efac 100%);
+            background: var(--oc-paper);
             border: 2px solid #4ade80;
         }
         .pit-bottom-input:focus {
             border-color: #22c55e;
-            box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.1);
+
         }
         .pit-current-input {
             background: #f3f4f6;
@@ -134,54 +131,52 @@
         }
         .pit-current-input:focus {
             border-color: #9ca3af;
-            box-shadow: 0 0 0 3px rgba(156, 163, 175, 0.2);
+
         }
         .pit-target-card {
-            background: linear-gradient(135deg, #fef9c3 0%, #fde047 100%);
-            border-left: 4px solid #eab308;
+            background: var(--oc-paper);
         }
         .pit-profit-card {
-            background: linear-gradient(135deg, #fee2e2 0%, #fca5a5 100%);
-            border-left: 4px solid #ef4444;
+            background: var(--oc-paper);
         }
         .pit-number-target {
-            background: linear-gradient(135deg, #ca8a04 0%, #a16207 100%);
+            background: var(--oc-paper);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             font-weight: 700;
         }
         .pit-number-profit {
-            background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+            background: var(--oc-paper);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             font-weight: 700;
         }
         .protect-entry-input {
-            background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
+            background: var(--oc-paper);
             border: 2px solid #fecaca;
         }
         .protect-entry-input:focus {
             border-color: #ef4444;
-            box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+
         }
         .protect-stop-input {
-            background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+            background: var(--oc-paper);
             border: 2px solid #bbf7d0;
         }
         .protect-stop-input:focus {
             border-color: #22c55e;
-            box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.1);
+
         }
         .protect-high-input {
-            background: linear-gradient(135deg, #fef9c3 0%, #fde047 100%);
+            background: var(--oc-paper);
             border: 2px solid #facc15;
         }
         .protect-high-input:focus {
             border-color: #eab308;
-            box-shadow: 0 0 0 3px rgba(234, 179, 8, 0.1);
+
         }
         .creator-info {
-            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            background: var(--oc-paper);
             color: #fbbf24;
             border: 1px solid #fbbf24;
         }
@@ -197,7 +192,7 @@
             to { opacity: 1; transform: translateY(0); }
         }
         .warning-box {
-            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            background: var(--oc-paper);
             border: 1px solid #f59e0b;
             color: #92400e;
         }
@@ -206,12 +201,12 @@
             border: 1px solid rgba(255, 255, 255, 0.1);
         }
         .status-success {
-            background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+            background: var(--oc-paper);
             border: 1px solid #10b981;
             color: #065f46;
         }
         .status-warning {
-            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            background: var(--oc-paper);
             border: 1px solid #f59e0b;
             color: #92400e;
         }
@@ -240,25 +235,25 @@
             display: inline-flex;
             align-items: center;
             padding: 0.25rem 0.75rem;
-            border-radius: 9999px;
+            border-radius: 0;
             font-size: 0.75rem;
             font-weight: 600;
             margin-left: 0.5rem;
             transition: all 0.3s;
         }
-        .risk-conservative { background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%); color: #065f46; }
-        .risk-moderate { background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%); color: #1e40af; }
-        .risk-aggressive { background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); color: #92400e; }
-        .risk-heavy { background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%); color: #991b1b; }
-        .risk-extreme { background: linear-gradient(135deg, #f3e8ff 0%, #e9d5ff 100%); color: #6b21a8; }
-        
+        .risk-conservative { background: var(--oc-paper); color: #065f46; }
+        .risk-moderate { background: var(--oc-paper); color: #1e40af; }
+        .risk-aggressive { background: var(--oc-paper); color: #92400e; }
+        .risk-heavy { background: var(--oc-paper); color: #991b1b; }
+        .risk-extreme { background: var(--oc-paper); color: #6b21a8; }
+
         /* 定制滑块样式 */
         input[type="range"] {
             -webkit-appearance: none;
             width: 100%;
             height: 6px;
             background: #e2e8f0;
-            border-radius: 5px;
+            border-radius: 0;
             outline: none;
         }
         input[type="range"]::-webkit-slider-thumb {
@@ -269,24 +264,266 @@
             border-radius: 50%;
             background: #3b82f6;
             cursor: pointer;
-            box-shadow: 0 2px 4px rgba(59, 130, 246, 0.4);
+
             transition: transform 0.1s;
         }
         input[type="range"]::-webkit-slider-thumb:hover {
             transform: scale(1.15);
         }
+
+        :root {
+            --oc-ground: #f3f4f6;
+            --oc-paper: #ffffff;
+            --oc-panel: #fbfbfc;
+            --oc-panel-muted: #f7f8f9;
+            --oc-ink: #13161a;
+            --oc-text: #30363e;
+            --oc-text-secondary: #505861;
+            --oc-muted: #6e7783;
+            --oc-quiet: #939aa4;
+            --oc-line: #e0e3e7;
+            --oc-line-strong: #cfd4da;
+            --oc-red: #c94742;
+            --oc-red-fill: #f8e9e7;
+            --oc-green: #14715c;
+            --oc-green-fill: #e8f3ef;
+            --oc-accent: #2563eb;
+            --oc-accent-fill: #dbeafe;
+            --oc-warning: #8a6418;
+            --oc-warning-fill: #fffbed;
+            --oc-warm: #996421;
+            --oc-on-solid: #ffffff;
+        }
+        html[data-theme="dark"] {
+            --oc-ground: #0f1216;
+            --oc-paper: #15191e;
+            --oc-panel: #181d23;
+            --oc-panel-muted: #1b2027;
+            --oc-ink: #f0f2f5;
+            --oc-text: #c9d0d8;
+            --oc-text-secondary: #aeb7c1;
+            --oc-muted: #8f99a5;
+            --oc-quiet: #7e8894;
+            --oc-line: #282f38;
+            --oc-line-strong: #39424d;
+            --oc-red: #bd716d;
+            --oc-red-fill: #302223;
+            --oc-green: #48b89d;
+            --oc-green-fill: #17332d;
+            --oc-accent: #8eacd2;
+            --oc-accent-fill: #1d2a3a;
+            --oc-warning: #c4aa70;
+            --oc-warning-fill: #282317;
+            --oc-warm: #b99565;
+            --oc-on-solid: #0f1216;
+        }
+        html, body {
+            min-width: 0;
+            overflow-x: hidden;
+            background: var(--oc-ground) !important;
+            color: var(--oc-text) !important;
+        }
+        body {
+            padding: 0 !important;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans SC', sans-serif !important;
+        }
+        ::selection { background: var(--oc-accent-fill); color: var(--oc-ink); }
+        * { scrollbar-color: var(--oc-line-strong) transparent; }
+        .oc-shell { max-width: 1180px; margin: 0 auto; padding: 0 24px 28px; }
+        .site-nav {
+            position: relative;
+            height: 58px;
+            margin: 0 0 18px;
+            padding: 0 max(24px, calc((100vw - 1180px) / 2 + 24px));
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid var(--oc-line-strong);
+            background: var(--oc-paper);
+            white-space: nowrap;
+        }
+        .site-wordmark { color: var(--oc-ink); font-size: 16px; font-weight: 730; letter-spacing: -.035em; text-decoration: none; }
+        .site-wordmark::after { content: ""; display: inline-block; width: 1px; height: 18px; margin-left: 22px; vertical-align: middle; background: var(--oc-line-strong); }
+        .site-nav-links { align-self: stretch; height: 100%; margin-left: 22px; display: flex; gap: 26px; align-items: center; overflow-x: auto; }
+        .site-link { height: 100%; display: flex; align-items: center; position: relative; color: var(--oc-muted); font-size: 11px; text-decoration: none; }
+        .site-link:hover { color: var(--oc-ink); }
+        .site-link.active { color: var(--oc-ink); font-weight: 650; }
+        .site-link.active::after { content: ""; position: absolute; right: 0; bottom: -1px; left: 0; height: 2px; background: var(--oc-ink); }
+        .theme-toggle { height: 30px; margin-left: auto; padding: 0 9px; border: 1px solid var(--oc-line-strong); border-radius: 0; background: transparent; color: var(--oc-muted); font-size: 10px; font-weight: 620; }
+        .theme-toggle:hover { border-color: var(--oc-ink); color: var(--oc-ink); }
+        .page-head { margin: 0 0 16px !important; padding: 2px 0 15px; border-bottom: 1px solid var(--oc-line-strong); text-align: left !important; }
+        .page-head h1 { margin: 0 !important; color: var(--oc-ink) !important; font-size: 28px !important; font-weight: 710 !important; line-height: 1.15; letter-spacing: -.04em; }
+        .page-head p { margin: 6px 0 0 !important; color: var(--oc-muted) !important; font-size: 11px !important; }
+        .workflow-tabs { justify-content: flex-start !important; margin-bottom: 16px !important; }
+        .workflow-tabs .workflow-tabs-bar { gap: 20px !important; padding: 0 !important; border: 0 !important; border-bottom: 1px solid var(--oc-line-strong) !important; background: transparent !important; }
+        .workflow-tabs .tab-btn { height: 38px; padding: 0 1px !important; border: 0 !important; border-bottom: 2px solid transparent !important; background: transparent !important; color: var(--oc-muted) !important; }
+        .workflow-tabs .tab-btn.active { border-bottom-color: var(--oc-ink) !important; color: var(--oc-ink) !important; }
+        .page-container { display: none; }
+        .page-container.active { display: block; animation: none; }
+        .glass-panel,
+        .result-card,
+        .target-card-red,
+        .breakeven-card,
+        .pit-target-card,
+        .pit-profit-card,
+        .creator-info,
+        .disclaimer,
+        .protect-card {
+            border: 1px solid var(--oc-line) !important;
+            border-radius: 0 !important;
+            background: var(--oc-paper) !important;
+            color: var(--oc-text) !important;
+        }
+        .glass-panel { padding: 20px !important; }
+        .oc-shell .shadow-sm,
+        .oc-shell .shadow-md,
+        .oc-shell .shadow-lg,
+        .oc-shell .shadow-xl,
+        .oc-shell .shadow-2xl { box-shadow: none !important; }
+        .oc-shell .rounded,
+        .oc-shell .rounded-md,
+        .oc-shell .rounded-lg,
+        .oc-shell .rounded-xl,
+        .oc-shell .rounded-full { border-radius: 0 !important; }
+        .input-group:focus-within { transform: none; }
+        .tab-btn,
+        .type-btn,
+        .mode-btn,
+        .rr-btn,
+        .personality-btn {
+            border: 1px solid var(--oc-line-strong) !important;
+            border-radius: 0 !important;
+            background: var(--oc-paper) !important;
+            color: var(--oc-muted) !important;
+            box-shadow: none !important;
+            transform: none !important;
+        }
+        .type-btn.active,
+        .mode-btn.active,
+        .rr-btn.active,
+        .personality-btn.active {
+            border-color: var(--oc-ink) !important;
+            background: var(--oc-paper) !important;
+            color: var(--oc-ink) !important;
+        }
+        .glass-panel h2 > svg,
+        .glass-panel h3 > svg,
+        #typeRRHint { color: var(--oc-muted) !important; }
+        .rr-badge { border: 1px solid var(--oc-line) !important; background: transparent !important; color: var(--oc-muted) !important; }
+        .risk-level-tag { border: 1px solid var(--oc-line); border-radius: 0 !important; background: var(--oc-panel) !important; color: var(--oc-text) !important; }
+        .warning-box,
+        .status-warning { border: 1px solid var(--oc-warning) !important; background: var(--oc-warning-fill) !important; color: var(--oc-warning) !important; }
+        .status-success { border: 1px solid var(--oc-green) !important; background: var(--oc-green-fill) !important; color: var(--oc-green) !important; }
+        .highlight-number,
+        .target-number-red,
+        .pit-number-target,
+        .pit-number-profit,
+        .protect-number { background: none !important; -webkit-text-fill-color: currentColor !important; color: var(--oc-ink) !important; }
+        .target-number-red,
+        .pit-number-profit { color: var(--oc-red) !important; }
+        input:not([type="range"]):not([type="hidden"]),
+        select {
+            border: 1px solid var(--oc-line-strong) !important;
+            border-radius: 0 !important;
+            background: var(--oc-paper) !important;
+            color: var(--oc-ink) !important;
+            box-shadow: none !important;
+            outline: none;
+        }
+        input:not([type="range"]):not([type="hidden"]):focus,
+        select:focus { border-color: var(--oc-accent) !important; outline: 2px solid var(--oc-accent-fill); outline-offset: 1px; }
+        input::placeholder { color: var(--oc-quiet); opacity: 1; }
+        input[type="range"] { height: 4px; border: 0 !important; border-radius: 0 !important; background: var(--oc-line-strong) !important; }
+        input[type="range"]::-webkit-slider-thumb { width: 15px; height: 15px; padding: 0; border: 2px solid var(--oc-paper); border-radius: 50%; background: var(--oc-accent) !important; box-shadow: none; }
+        .text-slate-800,
+        .text-slate-700,
+        .text-slate-600 { color: var(--oc-text) !important; }
+        .text-slate-500,
+        .text-slate-400,
+        .text-slate-300 { color: var(--oc-muted) !important; }
+        .text-blue-600,
+        .text-blue-500,
+        .text-indigo-900,
+        .text-indigo-800,
+        .text-indigo-700,
+        .text-indigo-600 { color: var(--oc-accent) !important; }
+        .text-red-800,
+        .text-red-700,
+        .text-red-600,
+        .text-red-500 { color: var(--oc-red) !important; }
+        .text-orange-800,
+        .text-orange-700,
+        .text-orange-600,
+        .text-orange-500 { color: var(--oc-warm) !important; }
+        .text-green-700,
+        .text-green-600,
+        .text-green-500 { color: var(--oc-green) !important; }
+        .text-amber-900,
+        .text-amber-800,
+        .text-amber-700,
+        .text-amber-600,
+        .text-amber-500,
+        .text-yellow-800,
+        .text-yellow-700,
+        .text-yellow-600,
+        .text-yellow-500 { color: var(--oc-warning) !important; }
+        .bg-white { background: var(--oc-paper) !important; }
+        .bg-slate-50,
+        .bg-slate-100,
+        .bg-slate-200,
+        .bg-gray-100,
+        .bg-indigo-50,
+        .bg-blue-50,
+        .bg-blue-100,
+        .bg-amber-50 { background: var(--oc-panel) !important; }
+        .border-slate-100,
+        .border-slate-200,
+        .border-slate-300,
+        .border-indigo-100,
+        .border-indigo-200,
+        .border-indigo-300,
+        .border-blue-200,
+        .border-blue-300,
+        .border-amber-200,
+        .border-orange-200,
+        .border-red-200,
+        .border-yellow-200,
+        .border-green-200 { border-color: var(--oc-line) !important; }
+        a { text-underline-offset: 3px; }
+        button:focus-visible,
+        a:focus-visible,
+        input:focus-visible,
+        select:focus-visible { outline: 2px solid var(--oc-ink); outline-offset: 2px; }
+        .creator-info,
+        .disclaimer { display: block !important; padding: 10px 0 !important; border-width: 1px 0 0 !important; background: transparent !important; color: var(--oc-muted) !important; }
+        .creator-info a { color: var(--oc-ink) !important; }
+        @media (max-width: 1179px) {
+            .page-container > .grid { grid-template-columns: 1fr !important; }
+        }
+        @media (max-width: 640px) {
+            .oc-shell { padding: 0 12px 20px; }
+            .site-nav { height: auto; min-height: 92px; margin: 0 0 14px; padding: 10px 12px 0; align-items: flex-start; flex-direction: column; }
+            .site-wordmark::after { display: none; }
+            .site-nav-links { width: 100%; height: 36px; margin-left: 0; gap: 18px; }
+            .site-link { flex: 0 0 auto; }
+            .theme-toggle { position: absolute; top: 10px; right: 12px; }
+            .page-head h1 { font-size: 24px !important; }
+            .workflow-tabs { overflow-x: auto; }
+            .workflow-tabs-bar { min-width: max-content; }
+            .glass-panel { padding: 16px !important; }
+        }
     </style>
 </head>
-<body class="text-slate-800 p-3 md:p-6">
-
-    <div class="max-w-6xl mx-auto">
-        <div class="text-center mb-4 text-white">
+<body class="text-slate-800">
+<!-- THESIS: A risk calculation workspace arranged as a quiet OneChart operating surface, refusing the prior colorful card stack. OWN-WORLD: OneChart ground, paper, ink, rules, and data-only semantic color. STORY: Traders select a workflow, enter known prices, and read executable risk boundaries. FIRST VIEWPORT: Unified navigation, plain title, workflow switcher, then input and result columns. FORM: Flat worksheet surface, seed 83f98f1d. FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, and DESIGN.md -->
+<nav class="site-nav" aria-label="OneChart 导航"><a class="site-wordmark" href="https://onechart.top/">OneChart</a><div class="site-nav-links"><a class="site-link" href="https://onechart.top/">资金雷达</a><a class="site-link" href="https://onechart.top/macro/">宏观择时</a><a class="site-link active" aria-current="page" href="./index.html">仓位计算器</a><a class="site-link" href="https://simu.onechart.top/">交易模拟器</a></div><button class="theme-toggle" type="button" onclick="window.toggleOneChartTheme()" aria-label="切换到深色模式" aria-pressed="false">深色</button></nav>
+    <div class="max-w-6xl mx-auto oc-shell">
+        <div class="page-head text-center mb-4 text-white">
             <h1 class="text-3xl md:text-4xl font-bold mb-1 tracking-tight">仓位计算器</h1>
             <p class="text-slate-300 text-sm">风险/盈亏比仓位管理工具</p>
         </div>
 
-        <div class="flex justify-center mb-4">
-            <div class="glass-panel rounded-xl p-1.5 flex gap-1.5 shadow-xl">
+        <div class="workflow-tabs flex justify-center mb-4">
+            <div class="workflow-tabs-bar glass-panel rounded-xl p-1.5 flex gap-1.5 shadow-xl">
                 <button onclick="switchTab('position')" id="tab-position" class="tab-btn active px-4 py-2 rounded-lg font-medium text-sm flex items-center gap-1.5 transition-all">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
@@ -321,10 +558,10 @@
                             </h2>
                             <div class="flex gap-2 bg-slate-100 p-1 rounded-lg">
                                 <button onclick="setPersonalityMode('courage')" id="mode-courage" class="personality-btn active px-3 py-1.5 rounded-md text-xs font-medium flex items-center gap-1">
-                                    <span>💪</span> 勇气
+                                    勇气
                                 </button>
                                 <button onclick="setPersonalityMode('sensitive')" id="mode-sensitive" class="personality-btn px-3 py-1.5 rounded-md text-xs font-medium flex items-center gap-1 text-slate-600">
-                                    <span>🧠</span> 敏感
+                                    敏感
                                 </button>
                             </div>
                         </div>
@@ -334,7 +571,7 @@
                                 <label class="block compact-label font-semibold text-slate-600 mb-1">账户总资金 (元)</label>
                                 <div class="relative">
                                     <span class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm">¥</span>
-                                    <input type="number" id="accountBalance" placeholder="100000" 
+                                    <input type="number" id="accountBalance" placeholder="100000"
                                         class="w-full pl-7 pr-3 py-2 rounded-lg border border-slate-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition-all text-base font-medium"
                                         oninput="calculatePosition()">
                                 </div>
@@ -353,17 +590,17 @@
                                     <label class="block text-xs font-semibold text-slate-600 mb-0 flex items-center">
                                         单笔风险: <span id="riskSliderVal" class="text-blue-600 font-bold ml-1 inline-block w-[45px]">2.00%</span>
                                     </label>
-                                    
+
                                     <span id="kellySuggestionBox" class="hidden text-[10px] px-1.5 py-0.5 rounded bg-indigo-50 border border-indigo-100 text-indigo-600 font-medium whitespace-nowrap">
                                         凯利建议: <span id="kellyRange" class="font-bold">--</span>
                                     </span>
-                                    <a id="kellyGoToSim" href="https://zxchart.github.io/trading-simu/" target="_blank" class="text-[10px] px-1.5 py-0.5 rounded bg-slate-200 border border-slate-300 text-slate-500 hover:text-blue-600 hover:bg-blue-50 transition-colors whitespace-nowrap">
+                                    <a id="kellyGoToSim" href="https://simu.onechart.top/" target="_blank" class="text-[10px] px-1.5 py-0.5 rounded bg-slate-200 border border-slate-300 text-slate-500 hover:text-blue-600 hover:bg-blue-50 transition-colors whitespace-nowrap">
                                         前往模拟器获取建议 ➔
                                     </a>
                                 </div>
                                 <span id="riskLevelTag" class="risk-level-tag risk-moderate mt-0 flex-shrink-0">稳健</span>
                             </div>
-                            <div class="relative mt-2 mb-3"> 
+                            <div class="relative mt-2 mb-3">
                                 <input type="range" id="riskSlider" min="0.1" max="5.0" step="0.05" value="2.0" oninput="updateRiskFromSlider()" class="m-0 block w-full">
                                 <div id="sliderTicks" class="relative mx-[9px] h-3 mt-1.5 text-[10px] text-slate-400 font-medium pointer-events-none"></div>
                             </div>
@@ -410,7 +647,7 @@
                             <div class="grid grid-cols-4 md:grid-cols-3 gap-2 h-10">
                                 <button onclick="setStopMode('price')" id="mode-price" class="mode-btn active h-full rounded-md text-xs font-medium transition-all">固定价格</button>
                                 <button onclick="setStopMode('percent')" id="mode-percent" class="mode-btn h-full rounded-md text-xs font-medium transition-all">固定幅度</button>
-                                
+
                                 <div class="col-span-2 md:col-span-1 relative h-full input-group">
                                     <div id="stopPriceWrapper" class="relative h-full w-full">
                                         <span class="absolute left-2.5 top-1/2 -translate-y-1/2 text-green-500 font-bold text-sm z-10">¥</span>
@@ -430,10 +667,10 @@
                         </div>
 
                     </div>
-                    
+
                     <div class="mt-4 border-t border-slate-100 pt-4">
-                        <a href="https://zxchart.github.io/trading-simu/" target="_blank" class="w-full py-3 px-4 rounded-lg font-bold text-center transition-all text-sm flex justify-center items-center gap-2 border border-blue-300 bg-blue-50 text-blue-600 hover:bg-blue-100 hover:border-blue-400 hover:shadow-md">
-                            🎲 切换至配套工具：策略模拟器 ➔
+                        <a href="https://simu.onechart.top/" target="_blank" class="w-full py-3 px-4 rounded-lg font-bold text-center transition-all text-sm flex justify-center items-center gap-2 border border-blue-300 bg-blue-50 text-blue-600 hover:bg-blue-100 hover:border-blue-400 hover:shadow-md">
+                            切换至配套工具：策略模拟器
                         </a>
                     </div>
                 </div>
@@ -487,7 +724,7 @@
                                     </div>
                                 </div>
                                 <div class="mt-2 pt-2 border-t border-orange-200 text-xs text-orange-800">
-                                    ⚡ 脱离成本区后重新回成本平出，继续上涨可考虑放飞，未脱离成本前保持持仓
+                                    脱离成本区后重新回成本平出，继续上涨可考虑放飞，未脱离成本前保持持仓
                                 </div>
                             </div>
 
@@ -727,7 +964,7 @@
                         </div>
                         <div class="flex items-center gap-3 bg-slate-50 p-2 px-3 rounded-lg border border-slate-100">
                             <span class="text-xs font-semibold text-slate-500 whitespace-nowrap">自定义</span>
-                            <div class="w-full relative"> <input type="range" id="customRRSlider" min="2" max="20" step="0.5" value="10" 
+                            <div class="w-full relative"> <input type="range" id="customRRSlider" min="2" max="20" step="0.5" value="10"
                                     class="m-0 block w-full" oninput="updateProtectRRFromSlider()">
                             </div>
                             <span id="customRRValue" class="text-xs font-bold text-indigo-600 w-10 text-right">10:1</span>
@@ -781,7 +1018,7 @@
                                         <div class="text-lg font-bold text-amber-600">-<span id="retracePercentDisplay">35</span>%</div>
                                     </div>
                                 </div>
-                                
+
                                 <div class="p-3 bg-indigo-50 rounded-lg border border-indigo-200">
                                     <div class="text-xs text-indigo-800 mb-1.5 font-medium">利润保护详情</div>
                                     <div class="space-y-1 text-xs">
@@ -868,6 +1105,7 @@
 
     </div>
 
+    <script>(function(){function syncThemeControl(){var dark=document.documentElement.dataset.theme==='dark';var button=document.querySelector('.theme-toggle');if(button){button.textContent=dark?'浅色':'深色';button.setAttribute('aria-label',dark?'切换到浅色模式':'切换到深色模式');button.setAttribute('aria-pressed',dark?'true':'false');}var meta=document.querySelector('meta[name="theme-color"]');if(meta)meta.setAttribute('content',dark?'#0f1216':'#f3f4f6');}window.toggleOneChartTheme=function(){var next=document.documentElement.dataset.theme==='dark'?'light':'dark';document.documentElement.dataset.theme=next;document.documentElement.style.colorScheme=next;try{localStorage.setItem('onechart-theme',next)}catch(e){}syncThemeControl();window.dispatchEvent(new CustomEvent('onechart-theme-change',{detail:{theme:next}}));};if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',syncThemeControl,{once:true});else syncThemeControl();})();</script>
     <script>
         // 全局变量
         let currentStopMode = 'price';
@@ -1380,8 +1618,8 @@
             setTradeType('B1');
             setStopMode('price');
             updateKellySuggestion();
-            updateHistoryUI(); 
-            
+            updateHistoryUI();
+
             window.addEventListener('storage', (event) => {
                 if (event.key === 'zxchart_kelly_B1' || event.key === 'zxchart_kelly_B2') {
                     updateKellySuggestion();
