@@ -1,8 +1,14 @@
-const CACHE_NAME = 'position-calc-v6';
+const CACHE_NAME = 'position-calc-v7';
 const APP_SHELL_URLS = [
     './',
     './index.html',
-    './manifest.json'
+    './manifest.json',
+    './icons/icon-192x192.png',
+    './icons/icon-512x512.png',
+    './assets/brand/onechart-favicon.svg',
+    './assets/brand/onechart-lockup-horizontal-black.svg',
+    './assets/brand/onechart-lockup-horizontal-white.svg',
+    './assets/brand/onechart-og.png'
 ];
 const OPTIONAL_EXTERNAL_URLS = [
     'https://cdn.tailwindcss.com',

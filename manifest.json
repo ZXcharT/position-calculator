@@ -1,7 +1,7 @@
 {
   "name": "仓位计算器 | OneChart",
   "short_name": "仓位计算",
-  "description": "风险与盈亏比仓位管理工具，支持A股及加密货币开仓、出坑、回撤保护计算。",
+  "description": "把账户资金、价格、止损和风险参数转换为可执行的仓位与保护边界。",
   "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#f3f4f6",
