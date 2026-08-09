@@ -527,6 +527,17 @@
             .workflow-tabs-bar { min-width: max-content; }
             .glass-panel { padding: 16px !important; }
         }
+
+        /* Semantic readability uplift for navigation, controls and generated 10px utility text. */
+        .site-link,
+        .theme-toggle { font-size: 12px !important; }
+        [class~="text-[10px]"] { font-size: 12px !important; line-height: 1.4; }
+        @media (max-width: 640px) {
+            .page-container > .grid { grid-template-columns: minmax(0, 1fr) !important; }
+            .page-container > .grid > *,
+            .glass-panel,
+            .compact-section { min-width: 0; }
+        }
     </style>
 </head>
 <body class="text-slate-800">
