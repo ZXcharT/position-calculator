@@ -147,6 +147,7 @@
   }
   window.toggleOneChartTheme = () => {
     desiredTheme = desiredTheme === 'dark' ? 'light' : 'dark';
+    window.OneChartThemeMemory.remember(desiredTheme);
     transition?.skipTransition();
     document.documentElement.classList.add('theme-changing');
     if (!reduced() && document.startViewTransition && document.visibilityState === 'visible') {
@@ -154,6 +155,11 @@
       active.finished.finally(() => { if (transition === active) { transition = null; document.documentElement.classList.remove('theme-changing'); } });
     } else { applyTheme(); document.documentElement.classList.remove('theme-changing'); }
   };
+  addEventListener('onechart-shared-theme-change', event => {
+    desiredTheme = event.detail.theme;
+    transition?.skipTransition();
+    applyTheme();
+  });
   applyTheme();
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', sync, {once:true}); else sync();
 })();
