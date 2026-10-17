@@ -1,0 +1,94 @@
+/* Task roles: blue = position/price, clear gold = risk, red/green = direction. */
+:root {
+  --calc-info: #355f7a;
+  --calc-info-fill: #dfe7ec;
+  --calc-info-line: #b7cbd6;
+  --calc-risk-value: #ad7900;
+  --calc-gold: #866000;
+  --calc-gold-fill: #f3ead3;
+  --calc-gold-line: #cfb973;
+  --calc-warning-ink: #785819;
+  --calc-risk-fill: #f3ead3;
+  --calc-risk-line: #c7ac6c;
+}
+html[data-theme=dark] {
+  --calc-info: #a0c4dc;
+  --calc-info-fill: #2a3b49;
+  --calc-info-line: #4b6a7d;
+  --calc-risk-value: #ddc082;
+  --calc-gold: #ddc082;
+  --calc-gold-fill: #383329;
+  --calc-gold-line: #746347;
+  --calc-warning-ink: #ddc082;
+  --calc-risk-fill: #3b3224;
+  --calc-risk-line: #8c7348;
+}
+.tab-btn.active, .tab-btn.active:hover {
+  color: var(--calc-info); background: var(--calc-info-fill);
+}
+.type-btn.active { color: var(--calc-info); }
+.page-container > .grid > .glass-panel h2 > svg {
+  display: block; width: 17px; height: 17px; color: var(--calc-info);
+}
+/* The complete monetary readout owns the color, including its currency symbol. */
+#page-position .risk-amount,
+#page-position .risk-amount #plannedRiskAmount,
+#page-position .risk-amount #actualRiskAmount {
+  color: var(--calc-risk-value);
+  font-size: 24px;
+  line-height: 1.3;
+}
+#page-position .compact-section.bg-slate-50 #riskSliderVal,
+.result-card:has(#actualRiskAmount) > .text-xs:first-child {
+  color: var(--calc-gold);
+}
+.risk-level-tag { border: 1px solid transparent; }
+.risk-level-tag.risk-aggressive,
+.risk-level-tag.risk-heavy,
+.risk-level-tag.risk-extreme {
+  color: var(--calc-gold); background: var(--calc-gold-fill); border-color: var(--calc-gold-line);
+}
+#riskSlider::-webkit-slider-thumb { background: var(--calc-risk-value); }
+#riskSlider::-moz-range-thumb { background: var(--calc-risk-value); }
+#positionShares,
+.result-card .price-amount,
+.breakeven-card .price-amount,
+.pit-target-card .price-amount,
+#retraceResultBox .price-amount,
+.price-amount #positionValue,
+.price-amount #breakevenPrice,
+.price-amount #pitTargetPrice,
+.price-amount #retracePrice { color: var(--calc-info); }
+#breakevenCard > .flex > .text-xs,
+#breakevenCard .rr-badge,
+.pit-target-card > .text-xs:first-child { color: var(--calc-info); }
+#breakevenCard .grid > div:last-child > .text-lg,
+#breakevenCard #breakevenPercent { color: var(--oc-red); }
+/* Positive target returns stay red; the risk gold is never reused for a price. */
+#protectResultsContainer > .protect-card .text-indigo-800,
+#protectResultsContainer > .protect-card .protect-number,
+#retraceResultBox #displayRetrace,
+#customRRValue { color: var(--calc-info); }
+#customRRSlider::-webkit-slider-thumb { background: var(--calc-info); }
+#customRRSlider::-moz-range-thumb { background: var(--calc-info); }
+#protectStatusBox.status-success { color: var(--calc-info); background: var(--calc-info-fill); }
+#protectStatusBox.status-success svg { color: var(--calc-info); }
+#protectStatusBox.status-success #protectStatusDesc { opacity: 1; }
+#protectStatusBox.status-warning, .calc-error, #warningBox, #pitWarningBox {
+  color: var(--calc-warning-ink); background: var(--calc-gold-fill);
+}
+#warningBox .text-amber-800, #warningBox svg,
+#pitWarningBox .text-amber-900, #pitWarningBox svg { color: var(--calc-warning-ink); }
+.budget-notice {
+  display: flex; align-items: flex-start; gap: 10px; padding: 14px;
+  border: 1px solid var(--calc-risk-line); border-radius: 11px;
+  background: var(--calc-risk-fill); color: var(--calc-warning-ink);
+  font-size: 13px; line-height: 1.75;
+}
+.budget-notice > svg { margin-top: 3px; }
+.budget-notice > div { min-width: 0; overflow-wrap: anywhere; }
+.budget-notice strong { display: block; font-weight: 650; margin-bottom: 5px; }
+.budget-notice p + p:not([hidden]) { margin-top: 5px; }
+.result-card[data-budget-exceeded] > .text-xs:first-child::after {
+  content: ' · 超预算'; color: var(--calc-warning-ink); font-weight: 600;
+}
