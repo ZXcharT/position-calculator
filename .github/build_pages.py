@@ -11,6 +11,7 @@ FILES=['index.html','utilities.css','layout.css','accents.css','page.js','manife
        'icons/icon-192x192.png','icons/icon-512x512.png',
        'assets/brand/onechart-favicon.svg','assets/brand/onechart-lockup-horizontal-black.svg',
        'assets/brand/onechart-lockup-horizontal-white.svg','assets/brand/onechart-og.png']
+FILES += ['assets/share/'+name for name in ('share-core.js','share-core.css','tool-share.js','tool-share.css','calc-diagrams.js','calc-diagrams.css','calc-position.js','multi-market-engine.js','multi-market.js','multi-market.css')]
 EXTRA={'domain-config.js','404.html','_headers'}
 revision=os.environ.get('CF_PAGES_COMMIT_SHA') or subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip()
 if not re.fullmatch('[0-9a-f]{40}',revision):raise ValueError('A concrete Git source revision is required')
@@ -29,8 +30,8 @@ html=html.replace('<head>','<head>\n    <script src="./domain-config.js"></scrip
 (OUT/'index.html').write_text(html)
 (OUT/'domain-config.js').write_text("'use strict';\nif (location.hostname === 'calc.onechartlab.com' || location.hostname === 'simu.onechartlab.com') {\n  window.__ONECHART_KELLY_COOKIE_DOMAIN__ = '.onechartlab.com';\n}\n")
 sw=(OUT/'sw.js').read_text()
-if sw.count("const CACHE_NAME = 'position-calc-v9';")!=1 or sw.count('const APP_SHELL_URLS = [')!=1:raise ValueError('Review the source PWA cache before publishing')
-sw=sw.replace("const CACHE_NAME = 'position-calc-v9';","const CACHE_NAME = 'one-calc-com-"+revision[:12]+"';",1)
+if sw.count("const CACHE_NAME = 'position-calc-v10-share-20261020';")!=1 or sw.count('const APP_SHELL_URLS = [')!=1:raise ValueError('Review the source PWA cache before publishing')
+sw=sw.replace("const CACHE_NAME = 'position-calc-v10-share-20261020';","const CACHE_NAME = 'one-calc-com-"+revision[:12]+"';",1)
 sw=sw.replace('const APP_SHELL_URLS = [',"const APP_SHELL_URLS = [\n    './domain-config.js',",1)
 (OUT/'sw.js').write_text(sw)
 (OUT/'404.html').write_text('<!doctype html><html lang="zh-CN"><meta charset="utf-8"><title>页面不存在 · One-CALC</title><p>页面不存在，请返回<a href="/">仓位计算器</a>。</p></html>\n')
