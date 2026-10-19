@@ -66,8 +66,12 @@ initializeOneChartThemeMemory('onechart-theme', 'light');
     <link rel="stylesheet" href="./utilities.css">
     <link rel="stylesheet" href="./layout.css">
     <link rel="stylesheet" href="./accents.css">
+<link rel="stylesheet" href="./assets/share/share-core.css">
+<link rel="stylesheet" href="./assets/share/tool-share.css">
+<link rel="stylesheet" href="./assets/share/calc-diagrams.css">
+<link rel="stylesheet" href="./assets/share/multi-market.css">
 </head>
-<body class="text-slate-800">
+<body data-share-tool="calc" class="text-slate-800">
 <header class="site-header" data-layout="navOuter">
   <div class="site-header-inner" data-layout="navInner">
     <a class="site-brand" href="https://onechartlab.com/" aria-label="OneChart 首页"><img class="brand-night" src="./assets/brand/onechart-lockup-horizontal-white.svg" alt="OneChart"><img class="brand-day" src="./assets/brand/onechart-lockup-horizontal-black.svg" alt="OneChart"></a>
@@ -1251,5 +1255,11 @@ initializeOneChartThemeMemory('onechart-theme', 'light');
     </script>
     <footer class="page-footer"><span class="site-footer-brand">OneChart · One-Calc</span><span class="research-disclaimer">仅用于价格计算，不构成任何投资建议</span></footer>
     <script src="./page.js"></script>
+<script src="./assets/share/share-core.js"></script>
+<script defer src="./assets/share/tool-share.js"></script>
+<script defer src="./assets/share/calc-diagrams.js"></script>
+<script defer src="./assets/share/calc-position.js"></script>
+<script defer src="./assets/share/multi-market-engine.js"></script>
+<script defer src="./assets/share/multi-market.js"></script>
 </body>
 </html>

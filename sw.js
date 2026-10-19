@@ -1,5 +1,15 @@
-const CACHE_NAME = 'position-calc-v9';
+const CACHE_NAME = 'position-calc-v10-share-20261020';
 const APP_SHELL_URLS = [
+  './assets/share/share-core.js',
+  './assets/share/share-core.css',
+  './assets/share/tool-share.js',
+  './assets/share/tool-share.css',
+  './assets/share/calc-diagrams.js',
+  './assets/share/calc-diagrams.css',
+  './assets/share/calc-position.js',
+  './assets/share/multi-market-engine.js',
+  './assets/share/multi-market.js',
+  './assets/share/multi-market.css',
     './',
     './index.html',
     './utilities.css',

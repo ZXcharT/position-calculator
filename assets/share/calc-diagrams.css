@@ -1,0 +1,29 @@
+/* Local worksheet trial. Incumbent equations and stored records stay untouched. */
+.position-rr-original{display:none!important}
+#page-position .position-rr-editor{display:inline-flex;align-items:center;flex:0 0 auto;width:max-content;gap:3px;min-height:32px;padding:2px 6px;border-radius:7px;background:var(--oc-selected);color:var(--oc-text);font-size:13px;font-weight:500}
+#page-position .position-rr-editor input{flex:0 0 auto;width:calc(5ch + 6px);min-height:28px;padding:2px 3px;border:0;border-radius:4px;background:transparent;font-size:14px;font-variant-numeric:tabular-nums;text-align:right;font-weight:500;appearance:textfield;-moz-appearance:textfield}
+#page-position .position-rr-editor input::-webkit-inner-spin-button,#page-position .position-rr-editor input::-webkit-outer-spin-button{-webkit-appearance:none;margin:0}
+#page-position .position-rr-editor input:focus{background:var(--oc-input)}
+.position-rr-error{margin:8px 0 0;font-size:12px;line-height:1.6;color:var(--oc-warning)}
+.position-rr-error[hidden]{display:none!important}
+.position-rr-invalid>.grid,.position-rr-invalid>.mt-2{visibility:hidden}
+
+.diagram-workflow #pitResultsContainer,.diagram-workflow #pitEmptyState,.diagram-workflow #protectResultsContainer,.diagram-workflow #protectEmptyState{display:none!important}
+.price-diagram{min-width:0;margin-top:8px;color:var(--oc-text)}
+.price-diagram-summary{display:flex;flex-wrap:wrap;gap:18px 32px;margin:0 0 18px;font-variant-numeric:tabular-nums}
+.price-diagram-summary>div{min-width:0}
+.price-diagram-summary dt{margin:0 0 5px;font-size:12px;color:var(--oc-muted);font-weight:400}
+.price-diagram-summary dd{margin:0;font-size:25px;line-height:1.35;font-weight:500;letter-spacing:-.02em}
+.price-money-unit{display:inline-block;font-size:11px;line-height:1;font-weight:400;letter-spacing:.025em;opacity:.8;white-space:nowrap;vertical-align:baseline}
+.price-diagram-summary .is-gain{color:var(--oc-red)}
+.price-diagram-summary .is-loss{color:var(--oc-green)}
+.price-diagram-plot{width:100%;min-height:320px}
+.price-diagram-plot svg{display:block;width:100%;height:auto;overflow:visible}
+.price-diagram-tips{margin-top:22px;padding-top:16px;border-top:1px solid var(--oc-line);color:var(--oc-muted)}
+.price-diagram-tips h3{margin:0 0 10px;font-size:13px;font-weight:500;color:var(--oc-text)}
+.price-diagram-tips ul{display:grid;gap:7px;list-style:none;padding:0;margin:0;font-size:12px;line-height:1.7}
+.price-diagram-tips .price-diagram-caption{margin:0;color:inherit;font-size:inherit;line-height:inherit}
+.price-diagram-tips [hidden]{display:none!important}
+.price-diagram-empty{display:flex;min-height:320px;align-items:center;justify-content:center;padding:24px;text-align:center;color:var(--oc-muted);font-size:13px}
+@media(min-width:960px){.diagram-workflow>.grid{grid-template-columns:340px minmax(0,1fr)!important;gap:20px}.diagram-workflow>.grid>.glass-panel{align-self:start}}
+@media(max-width:959px){.diagram-workflow>.grid{grid-template-columns:minmax(0,1fr)!important}.price-diagram-summary{gap:14px 24px}.price-diagram-summary dd{font-size:23px}}
