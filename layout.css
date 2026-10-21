@@ -17,9 +17,15 @@ html[data-theme=dark] .site-brand .brand-night{display:block}
 .site-nav-links a{display:block;flex:none;padding:7px 12px;border-radius:10px;corner-shape:squircle;color:var(--frame-muted);font-size:13px;line-height:1.5;font-weight:500;white-space:nowrap;text-decoration:none;transition:background-color 150ms ease-out,color 150ms ease-out}
 .site-nav-links a:hover{background:var(--frame-hover);color:var(--frame-text)}
 .site-nav-links a.active{background:var(--frame-selected);color:var(--frame-heading)}
-.site-global-tools{justify-self:end;width:60px}
-.theme-button{position:relative;display:flex;align-items:center;justify-content:center;width:30px;height:30px;margin-left:auto;padding:0;border:0;border-radius:10px;background:transparent;color:var(--frame-muted)}
-.theme-button:hover{background:var(--frame-hover);color:var(--frame-text)}
+/* Actual calculator tools only: screenshot and theme; no account or placeholder action. */
+.site-global-tools{display:flex;align-items:center;justify-content:flex-end;justify-self:end;gap:8px;width:auto;min-width:0;overflow:visible}
+.site-global-tools .share-global-tools{display:contents}
+.site-global-tools :is(button.theme-button,button.share-trigger){box-sizing:border-box;display:flex;align-items:center;justify-content:center;flex:none;width:30px;height:30px;min-height:30px;margin:0;padding:0;border:0;border-radius:10px;corner-shape:squircle;background:transparent;color:var(--frame-muted);box-shadow:none;cursor:pointer;transition:background-color 120ms ease-out,color 120ms ease-out}
+.site-global-tools :is(button.theme-button,button.share-trigger):not(:disabled):is(:hover,:focus-visible){background:var(--frame-hover);color:var(--frame-heading)}
+.site-global-tools :is(button.theme-button,button.share-trigger):focus-visible{outline:2px solid var(--oc-accent);outline-offset:3px}
+.site-global-tools :is(button.theme-button,button.share-trigger):not(:disabled):active{background:var(--frame-hover);box-shadow:inset 0 0 2px #0002}
+.site-global-tools :is(.theme-button,.share-trigger) svg{width:18px;height:18px;pointer-events:none}
+.theme-button{position:relative}
 .theme-button svg{position:absolute;transition:opacity 180ms ease-out,transform 240ms ease-out}
 .theme-moon{opacity:1;transform:rotate(0) scale(1)}
 .theme-sun{opacity:0;transform:rotate(35deg) scale(.75)}
@@ -42,7 +48,7 @@ body{display:flex;flex-direction:column;min-height:100dvh}
 .oc-shell{flex:1 0 auto;padding-bottom:20px}
 .page-footer{flex:none;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;width:100%;max-width:var(--site-max);margin-inline:auto;padding:22px var(--frame-gutter) 28px;border:0;color:var(--frame-muted);font-size:11px;line-height:1.5}
 .site-footer-brand{white-space:nowrap}
-@media(max-width:900px){.site-header-inner{grid-template-columns:minmax(0,1fr) auto;gap:0 12px;padding-top:8px;padding-bottom:8px}.site-nav-links{grid-column:1/-1;grid-row:2;justify-self:start;width:100%;padding-top:4px}.site-global-tools{grid-column:2;grid-row:1}.site-brand img{height:32px}.site-nav-links a{padding:7px 10px}.site-nav-links a:first-child{margin-left:-10px}}
+@media(max-width:900px){.site-header-inner{grid-template-columns:minmax(0,1fr) auto;gap:0 12px;padding-top:8px;padding-bottom:8px}.site-nav-links{grid-column:1/-1;grid-row:2;justify-self:center;width:max-content;max-width:100%;padding-top:4px}.site-global-tools{grid-column:2;grid-row:1}.site-brand img{height:32px}.site-nav-links a{padding:7px 10px}.site-nav-links a:first-child{margin-left:-10px}}
 @media(max-width:600px){:root{--frame-gutter:14px}}
 /* Number fields keep native validation and keyboard stepping, without browser spin arrows. */
 input[type=number]{appearance:textfield;-moz-appearance:textfield}
